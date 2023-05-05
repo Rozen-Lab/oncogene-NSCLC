@@ -1,7 +1,7 @@
 # About this code repository
 This repository provides R codes and data used for the paper
 
-> Huang C-Y, et al. (2023). "Dearth of smoking-induced mutations in 
+> Huang, C-Y, et al. (2023). "Dearth of smoking-induced mutations in 
 > oncogene-driven non-small-cell lung cancer despite smoking exposure". 
 > DOI: (will provide after publication)
 

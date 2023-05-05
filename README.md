@@ -2,7 +2,7 @@
 This repository provides R codes and data used for the paper
 
 > Huang CY, Jiang NH, et al (2023). "Dearth of smoking-induced mutations in 
-> oncogene-driven non-small cell lung cancer despite smoking exposure". 
+> oncogene-driven non-small-cell lung cancer despite smoking exposure". 
 > DOI: (will provide the doi after the paper is accepted)**
 
 The scripts are written in R (version 4.1.0). The data needed for the code

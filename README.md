@@ -14,6 +14,6 @@ under accession number EGAS00001006942.
 
 # External links to resources related to the project
 * TCGA cBioPortal: http://www.cbioportal.org/
-* Reactome pathway on MSigDB: https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=CP:REACTOME
+* Reactome pathways on MSigDB: https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=CP:REACTOME
 * COSMIC catalog of driver gene mutations: https://cancer.sanger.ac.uk/cmc/home
 * RNA gene panel used to classify gene expression subtype (TRU vs. non-TRU) by Wilkerson et al.: https://pubmed.ncbi.nlm.nih.gov/22590557/

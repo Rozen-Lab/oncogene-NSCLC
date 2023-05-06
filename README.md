@@ -12,7 +12,7 @@ The whole-exome and RNA sequencing data have been deposited at
 the European Genome-phenome Archive (EGA, http://www.ebi.ac.uk/ega/), 
 under accession number EGAS00001006942.
 
-# External links to resources related to the project
+# Links external resources used
 * TCGA cBioPortal: http://www.cbioportal.org/
 * Reactome pathways on MSigDB: https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=CP:REACTOME
 * COSMIC catalog of driver gene mutations: https://cancer.sanger.ac.uk/cmc/home

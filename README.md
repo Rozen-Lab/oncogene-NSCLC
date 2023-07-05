@@ -1,7 +1,7 @@
 # About this code repository
 This repository provides R codes and data used for the paper
 
-> Huang, C-Y, et al. (2023). "Dearth of smoking-induced mutations in 
+> Huang, C.-Y., et al. (2023). "Dearth of smoking-induced mutations in 
 > oncogene-driven non-small-cell lung cancer despite smoking exposure". 
 > DOI: (will provide after publication)
 
@@ -12,7 +12,7 @@ The whole-exome and RNA sequencing data have been deposited at
 the European Genome-phenome Archive (EGA, http://www.ebi.ac.uk/ega/), 
 under accession number EGAS00001006942.
 
-# Links external resources used
+# Links to external resources used in this study
 * TCGA cBioPortal: http://www.cbioportal.org/
 * Reactome pathways on MSigDB: https://www.gsea-msigdb.org/gsea/msigdb/human/genesets.jsp?collection=CP:REACTOME
 * COSMIC catalog of driver gene mutations: https://cancer.sanger.ac.uk/cmc/home

@@ -145,6 +145,11 @@ ITH2.sparse <- left_join(ITH2.sparse,
   left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr, Oncogene_mut), 
             by = "Patient_ID")
 
+ITH2.sparse$Group <- factor(
+  ITH2.sparse$Group, 
+  levels = c("NSRO-driven non-smoking","NSRO-neg non-smoking", 
+             "NSRO-driven smoking","Typical-smoking"))
+
 # prepare the color key of mut sig
 color.mutsig <- c(scales::brewer_pal(palette = "Paired")(7),"grey10")
 names(color.mutsig) <- c("SBS5","SBS1","SBS40","SBS18","SBS9","APOBEC","SBS17a","SBS4")

@@ -19,6 +19,8 @@ tmp <- count(ITH2.mut.cat, Sector_ID, Clonality) %>%
 
 ITH2.table <- subset(ITH2.table, Tissue_type == "Tumor") 
 
+ITH2.table$Group[ITH2.table$Patient_ID %in% c("A033","A073")] <- "NSRO-neg non-smoking"
+
 ITH2.table <- left_join(x = dplyr::select(ITH2.table, Group, ends_with("ID")), y = tmp, 
                         by = c("Sector_WES_ID" = "Sector_ID")) %>% 
   left_join(y = dplyr::select(ITH2.clinical, Patient_ID, Gender, Tumor_histology, 
@@ -51,7 +53,8 @@ ITH2.table$TP53.status <-
 
 ITH2.table$Group <- factor(
   ITH2.table$Group, 
-  levels = c("Oncogene-driven non-smoking","Oncogene-driven smoking","Typical smoking"))
+  levels = c("NSRO-driven non-smoking","NSRO-neg non-smoking", 
+             "NSRO-driven smoking","Typical-smoking"))
 
 ITH2.table$Oncogene_mut <- factor(
   ITH2.table$Oncogene_mut, 

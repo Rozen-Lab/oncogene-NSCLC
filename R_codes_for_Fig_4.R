@@ -71,6 +71,13 @@ ITH2.RNA.gsva <- GSVA::gsva(
 
 ### conduct differential pathway analysis and clustering
 ITH2.RNA$Smoking_status <- ifelse(ITH2.RNA$Smoking_pk_yr > 0, "Ex.Current smoker", "Never smoker")
+ITH2.RNA$SBS4 <- as.numeric(ITH2.sparse["SBS4",ITH2.RNA$Sector_WES_ID])
+ITH2.RNA$SBS4.activity <- ifelse(ITH2.RNA$SBS4 > median(ITH2.RNA$SBS4[ITH2.RNA$SBS4>0]), 
+                                 "SBS4.high", "SBS4.low")
+
+ITH2.RNA$Group <- factor(ITH2.RNA$Group, 
+                         levels = c("Non-smoking","NSRO-driven smoking","Typical-smoking"))
+
 mod <- model.matrix(~ ITH2.RNA$Smoking_status, levels = c("Ex.Current smoker","Never smoker"))
 colnames(mod)[2] <- c("non.smoker")
 fit <- lmFit(object = ITH2.RNA.gsva, design = mod)
@@ -95,7 +102,8 @@ tmp <- dplyr::count(ITH2.RNA, Patient_ID, pathway.group) %>%
                                       ifelse(`Group II`==0, "Group I", "Mixed"))) %>% 
   mutate(pathway.group.tumor = factor(pathway.group.tumor, 
                                       levels = c("Group I","Mixed","Group II"))) %>% 
-  left_join(dplyr::select(ITH2.clinical, Group, Patient_ID), by = "Patient_ID") %>% 
+  left_join(ITH2.RNA[!duplicated(ITH2.RNA$Patient_ID),c("Group", "Patient_ID")], 
+            by = "Patient_ID") %>% 
   arrange(Group, pathway.group.tumor, desc(`Group II`), `Group I`)
 
 ITH2.RNA <- mutate(ITH2.RNA, Patient_ID = factor(Patient_ID, levels = tmp$Patient_ID)) %>% 
@@ -129,24 +137,25 @@ rownames(gsva.pathway) <- paste(str_pad(pathway.q.value, width = 8, side = "righ
 Heatmap(as.matrix(gsva.pathway), name = "Z score", 
         column_split = rep(unique(ITH2.RNA$Group), table(ITH2.RNA$Group)),
         cluster_columns = F, column_names_gp = gpar(fontsize = 4), 
-        row_split = rep(c("Up-regulated","Down-regulated"), c(length(DEpwys.up), length(DEpwys.down))), row_km = 1,
-        cluster_rows = F, row_names_gp = gpar(fontsize = 6), 
+        row_split = rep(c("Up-regulated","Down-regulated"), 
+                        c(length(DEpwys.up), length(DEpwys.down))), 
+        cluster_rows = F, row_km = 1, row_names_gp = gpar(fontsize = 6), 
         top_annotation = HeatmapAnnotation(
           Group = ITH2.RNA$Group, 
           Oncogene = ITH2.RNA$Oncogene_mut, 
-          Pathway.group = ITH2.RNA$pathway.group,
           TRU.subtype = ITH2.RNA$gene.exp.subtype,
+          SBS4.activity = ITH2.RNA$SBS4.activity, 
           Smoking = ITH2.RNA$Smoking_pk_yr,
           Patient.mark = ITH2.RNA$Patient.mark,
-          col = list(Group = c("Oncogene-driven non-smoking"="#66CCEE", 
-                               "Oncogene-driven smoking"="#EE6677",
-                               "Typical smoking"="#228833"),
+          col = list(Group = c("Non-smoking"="#66CCEE", 
+                               "NSRO-driven smoking"="#EE6677",
+                               "Typical-smoking"="#228833"),
                      Oncogene = c("EGFR"="orchid3","KRAS"="lightskyblue","MET"="yellowgreen",
-                                  "ALK"="brown4","ERBB2"="tan1","Wild type"="gray95"),
-                     Pathway.group = c("Group I"="black", "Group II"="gray70"),
+                                  "ALK"="brown","ERBB2"="tan1","Wild type"="gray90"),
                      TRU.subtype = c("TRU"="violetred1", "Non-TRU"="steelblue1"),
+                     SBS4.activity = c("SBS4.high"="black", "SBS4.low"="gray90"),
                      Patient.mark = c("A" = "gray90", "B" = "gray10"),
-                     Smoking = c("0"="grey95", "0-20"="grey75","20-40"="grey55",
+                     Smoking = c("0"="grey90", "0-20"="grey75","20-40"="grey55",
                                  "40-60"="grey35","60-80"="grey15","80up"="grey5")
           )
         ))

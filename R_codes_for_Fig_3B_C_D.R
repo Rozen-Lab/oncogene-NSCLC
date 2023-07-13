@@ -17,6 +17,9 @@ ITH2.sparse <- left_join(
   ITH2.sparse, dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group), by = "Sector_WES_ID") %>% 
   left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr), by = "Patient_ID")
 
+# We will exclude NSRO-neg non-smoking group in the comparison
+ITH2.sparse <- subset(ITH2.sparse, Group != "NSRO-neg non-smoking")
+
 ## SBS4 assignment and z test 
 SBS4.prop.by.group <- group_by(ITH2.sparse, Group) %>% 
   summarise(SBS4.assigned = sum(SBS4>0), SBS4.unassigned = sum(SBS4==0)) %>% 
@@ -47,15 +50,15 @@ ggplot(ITH2.SBS4, aes(x=log10(Total.mut), y=SBS4)) +
   geom_point(aes(color = Group), size = 3, show.legend = F) + 
   facet_grid(. ~ Group) + theme_bw() + 
   theme(axis.title.x = element_blank()) + 
-  scale_color_manual(values = c("Oncogene-driven non-smoking"="#66CCEE",
-                                "Oncogene-driven smoking"="#EE6677",
-                                "Typical smoking"="#228833"))
+  scale_color_manual(values = c("NSRO-driven non-smoking"="#66CCEE",
+                                "NSRO-driven smoking"="#EE6677",
+                                "Typical-smoking"="#228833"))
 
 # run tsne dimension reduction
-tsne_out <- Rtsne(t(data.frame(ITH2.spectra.sbs96)), 
+tsne_out <- Rtsne(t(data.frame(ITH2.spectra.sbs96[,ITH2.sparse$Sector_WES_ID])), 
                   dims = 2, perplexity=30, verbose=TRUE, max_iter = 10000)
 
-tmp <- data.frame(tsne_out$Y, Sector_WES_ID = colnames(ITH2.spectra.sbs96)) %>% 
+tmp <- data.frame(tsne_out$Y, Sector_WES_ID = ITH2.sparse$Sector_WES_ID) %>% 
   left_join(dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group),
             by = "Sector_WES_ID")
 
@@ -63,6 +66,6 @@ tmp <- data.frame(tsne_out$Y, Sector_WES_ID = colnames(ITH2.spectra.sbs96)) %>%
 ggplot(tmp, aes(x=X1, y=X2)) + 
   geom_point(aes(color = Group), size = 3) + 
   xlab("tSNE_1") + ylab("tSNE_2") + theme_bw() + 
-  scale_color_manual(values = c("Oncogene-driven non-smoking"="#66CCEE",
-                                "Oncogene-driven smoking"="#EE6677",
-                                "Typical smoking"="#228833"))
+  scale_color_manual(values = c("NSRO-driven non-smoking"="#66CCEE",
+                                "NSRO-driven smoking"="#EE6677",
+                                "Typical-smoking"="#228833"))

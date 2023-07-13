@@ -4,7 +4,6 @@ rm(list = ls())
 library(dplyr)
 library(ggrepel)
 library(ggpubr)
-library(gridExtra)
 load("ITH2_data.Rdata")
 
 # compare TMB, Truncal mut, driver mut and ITH across 3 groups
@@ -24,20 +23,34 @@ rownames(tmp2) <- tmp2$Patient_ID
 ITH2.clinical$Tumor_mut_burden <- tmp2[ITH2.clinical$Patient_ID, "TMB.tumor"]
 ITH2.clinical$ITH <- tmp2[ITH2.clinical$Patient_ID, "ITH.tumor"]
 
+# We will exclude NSRO-neg non-smoking group in the comparison
+ITH2.clinical <- subset(ITH2.clinical, Group != "NSRO-neg non-smoking")
+
 p <- lapply(c("Tumor_mut_burden","Truncal_mut","Num_driver_mut","ITH"), function(x){
+  y.max <- case_when(
+    x %in% c("Tumor_mut_burden", "Truncal_mut") ~ 800,
+    x == "Num_driver_mut" ~ 60,
+    x == "ITH" ~ 1
+  )
+  
   p <- ggpubr::ggviolin(
     ITH2.clinical, x = "Group", y = x, fill = "Group",
-    palette =  c("#66CCEE","#EE6677","#228833"), 
+    palette =  c("#66CCEE","#EE6677","#228833"), width = 0.8, 
     add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + 
     rremove("legend") + 
+    scale_y_continuous(limits = c(0,y.max)) + 
     theme(axis.title.y = element_blank(), axis.text.x = element_blank()) 
   return(p)
 })
-do.call("grid.arrange", c(p,ncol = 4))
+do.call("ggarrange", c(p,ncol = 4))
 
 # calculate odds ratio of driver mutation and p value using Fisher's test
-mut.catalog <- left_join(ITH2.mut.cat, dplyr::select(ITH2.table, Sector_WES_ID, Group), 
-                         by = c("Sector_ID" = "Sector_WES_ID")) %>% 
+# We will not include NSRO-neg non-smoking group in the comparison
+ITH2.table <- subset(ITH2.table, Group != "NSRO-neg non-smoking")
+
+mut.catalog <- subset(ITH2.mut.cat, Patient_ID %in% ITH2.table$Patient_ID) %>% 
+  left_join(dplyr::select(ITH2.table, Sector_WES_ID, Group), 
+            by = c("Sector_ID" = "Sector_WES_ID")) %>% 
   mutate(CHECK = str_glue("{Patient_ID}:{Gene}")) %>% 
   subset(Driver_gene == "Driver" & !duplicated(CHECK)) 
 
@@ -85,7 +98,7 @@ p1 <- ggplot(gene.OR, aes(x = OR.3v1.log2, y = -log10(pvalue.3v1))) +
   geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
   ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
                             label = ifelse(gene.OR$pvalue.3v1 < 0.05, gene.OR$Gene,"")) +
-  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4.5)
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,5)
 
 p2 <- ggplot(gene.OR, aes(x = OR.3v2.log2, y = -log10(pvalue.3v2))) + 
   geom_point(size = 3, show.legend = FALSE,
@@ -94,11 +107,11 @@ p2 <- ggplot(gene.OR, aes(x = OR.3v2.log2, y = -log10(pvalue.3v2))) +
   geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
   ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
                             label = ifelse(gene.OR$pvalue.3v2 < 0.05, gene.OR$Gene,"")) +
-  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4.5) 
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,5) 
 
 p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) + 
   geom_point(size = 3, show.legend = FALSE, color = "gray60") + 
   geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
-  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4.5)
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,5)
 
 ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")

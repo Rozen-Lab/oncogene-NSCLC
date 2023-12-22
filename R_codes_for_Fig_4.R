@@ -104,7 +104,7 @@ tmp <- dplyr::count(ITH2.RNA, Patient_ID, pathway.group) %>%
                                       levels = c("Group I","Mixed","Group II"))) %>% 
   left_join(ITH2.RNA[!duplicated(ITH2.RNA$Patient_ID),c("Group", "Patient_ID")], 
             by = "Patient_ID") %>% 
-  arrange(Group, pathway.group.tumor, desc(`Group II`), `Group I`)
+  arrange(Group, desc(pathway.group.tumor), desc(`Group II`), `Group I`)
 
 ITH2.RNA <- mutate(ITH2.RNA, Patient_ID = factor(Patient_ID, levels = tmp$Patient_ID)) %>% 
   arrange(Patient_ID, pathway.group) %>% 

@@ -127,7 +127,7 @@ barplot.mut <- function(gene, plot.mut.type = FALSE){
 }
 
 ## oncoplot 
-layout(matrix(c(rep(1,10), rep(2,4),3:30,rep(31,3)), ncol = 1))
+layout(matrix(c(rep(1,10), rep(2,4),3:29,rep(30,3)), ncol = 1))
 par(mar = c(0.2, 0.2, 0.1, 0.2), oma = c(1, 10, 2, 0.5))
 
 #1 plot TMB bar
@@ -160,14 +160,7 @@ barplot(rep(1,nrow(ITH2.table)), border = NA, axes = FALSE, space = space.brp,
         col = ifelse(ITH2.table$Tumor_histology == "Adenocarcinoma", "lightblue2", "seagreen4"))
 mtext("Histology", side=2, line = -2, cex = 1, las = 2, outer = FALSE, col = 'black')
 
-#6 plot RNA expression subtype
-barplot(rep(1,nrow(ITH2.table)), axes = FALSE, space = space.brp, 
-        border = ifelse(ITH2.table$RNA.subtype == "No RNA sample", "gray", NA), 
-        col = ifelse(ITH2.table$RNA.subtype == "Non-TRU", "steelblue1",
-                     ifelse(ITH2.table$RNA.subtype == "TRU", "violetred1", "white")))
-mtext("RNA expression subtype", side=2, line = -2, cex = 1, las = 2, outer = FALSE, col = 'black')
-
-#8~28 genomic mut bar
+#6~26 genomic mut bar
 for(i in c("EGFR","MET","ERBB2","KRAS")){
   barplot.mut(gene = i)
 }
@@ -176,7 +169,7 @@ for(i in setdiff(gene.highlight, c("EGFR","MET","ERBB2","KRAS"))){
   barplot.mut(gene = i, plot.mut.type = FALSE)
 }
 
-#29-31 gene fusion bar
+#27-29 gene fusion bar
 for(i in 1:nrow(fusion.label)){
   barplot(rep(1,nrow(ITH2.table)), axes = FALSE, space = space.brp, 
           border = ifelse(ITH2.table$RNA.subtype == "No RNA sample", "gray", NA), 
@@ -185,7 +178,7 @@ for(i in 1:nrow(fusion.label)){
   mtext("2.1 %", side=2, line = -2, cex = 1, las = 2, outer = FALSE, col = 'black')
 }
 
-#32 label patient ID
+#30 label patient ID
 tmp <- barplot(rep(1,nrow(ITH2.table)), border = NA, axes = F, space = space.brp, col = "white")
 text(x = sapply(unique(ITH2.table$Patient_ID), function(x){mean(tmp[ITH2.table$Patient_ID==x])}), 
      y = 0.5, label = unique(ITH2.table$Patient_ID), cex = 1, srt=90, col = "black", )

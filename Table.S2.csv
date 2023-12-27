@@ -1,0 +1,49 @@
+"Patient_ID","Group","Age","Gender","Ethnicity","Smoking.status","Smoking.start.age","Smoking.stop.age","Smoking.cessation.years","Smoking.pack.years","Primary.tumor.location","Resection.type","Tumor.histology","Stage.AJCC.7th","Tumor.size.cm","T.Stage","N.Stage","Lymphovascular.invasion","ALK.FISH","Mutated.oncogene","Tumor.mutational.burden","Truncal.mutation.count","Num.mutations.driver.genes","Intratumor.heterogeneity","Num.tumor.sectors"
+"A074","Non-smokers",78,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IV",3,"pT1b","pN2",NA,"negative","EGFR",97,4,13,0.952,5
+"A248","Non-smokers",59,"Female","Indonesian","Never smoker",NA,NA,NA,0,"Left lower lobe","Lobectomy","Adenocarcinoma","IIA",3.5,"pT2a","pN1","Yes","negative","HER2",77,13,10,0.824,4
+"A435","Non-smokers",68,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IIA",3.8,"pT2a","pN1","Yes","negative","EGFR",74,22,6,0.698,3
+"A120","Non-smokers",82,"Male","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","MET",73,29,4,0.604,3
+"A233","Non-smokers",81,"Male","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","MET",55,17,4,0.686,5
+"A111","Non-smokers",61,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IB",4,"pT2a","pN0","No","negative","EGFR",54,31,6,0.419,5
+"A182","Non-smokers",72,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",2.7,"pT1b","pN0","No","negative","EGFR",78,34,5,0.547,3
+"A073","Non-smokers",51,"Male","Chinese","Never smoker",NA,NA,NA,0,"Right middle lobe","Lobectomy","Adenocarcinoma","IA",2.2,"pT1b","pN0","No","negative","Wild Type",36,7,7,0.798,5
+"A570","Non-smokers",60,"Female","Malay","Never smoker",NA,NA,NA,0,"Right lower lobe","Lobectomy","Adenocarcinoma","IIA",2.5,"pT1b","pN1","Yes","negative","EGFR",47,13,9,0.667,4
+"A322","Non-smokers",70,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right middle lobe","Lobectomy","Adenocarcinoma","IA",2.5,"pT1a","pN0","No","positive","ALK",36,20,7,0.424,5
+"A577","Non-smokers",65,"Male","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IIIA",5.5,"pT3","pN1","Yes","negative","EGFR",49,19,5,0.593,3
+"A153","Non-smokers",78,"Male","Chinese","Never smoker",NA,NA,NA,0,"Right middle lobe","Lobectomy","Adenocarcinoma","IA",2,"pT1a","pN0","No","negative","EGFR",40,17,8,0.549,4
+"A432","Non-smokers",64,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IB",4.5,"pT2a","pN0","No","negative","EGFR",37,11,6,0.696,3
+"A021","Non-smokers",57,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","EGFR",52,40,3,0.236,4
+"A146","Non-smokers",73,"Male","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IIA",4,"pT2a","pN1","No","negative","EGFR",49,33,3,0.325,3
+"A377","Non-smokers",71,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left lower lobe","Lobectomy","Adenocarcinoma","IA",2.8,"pT1b","pN0","No","negative","EGFR",44,28,4,0.387,3
+"A561","Non-smokers",68,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Squamous cell carcinoma","IIA",5,"pT2a","pN1","Yes","negative","MET",35,13,3,0.609,4
+"A161","Non-smokers",65,"Male","Indian","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",2.8,"pT1b","pN0","Yes","negative","EGFR",35,22,3,0.357,3
+"A033","Non-smokers",44,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left lower lobe","Lobectomy","Adenocarcinoma","IIA",6.5,"pT2b","pN0","No","negative","Wild Type",21,4,1,0.798,3
+"A037","Non-smokers",66,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left lower lobe","Lobectomy","Adenocarcinoma","IIB",3.3,"pT3","pN0","No","negative","EGFR",28,15,3,0.448,4
+"A249","Non-smokers",53,"Female","Chinese","Never smoker",NA,NA,NA,0,"Left upper lobe","Lobectomy","Adenocarcinoma","IIA",4,"pT2a","pN1","Yes","negative","EGFR",28,9,3,0.676,2
+"A558","Non-smokers",67,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right lower lobe","Lobectomy","Adenocarcinoma","IA",2.5,"pT1b","pN0","Yes","negative","EGFR",28,15,2,0.468,3
+"A310","Non-smokers",67,"Male","Chinese","Never smoker",NA,NA,NA,0,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","EGFR",32,19,4,0.393,2
+"A243","Non-smokers",62,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right lower lobe","Lobectomy","Adenocarcinoma","IIIA",3.5,"pT2a","pN2","Yes","negative","EGFR",25,7,2,0.702,3
+"A163","Non-smokers",57,"Female","Chinese","Never smoker",NA,NA,NA,0,"Right lower lobe","Lobectomy","Adenocarcinoma","IIIA",4,"pT2a","pN2","Yes","negative","EGFR",24,17,3,0.272,5
+"A177","NSRO-driven in smokers",77,"Male","Chinese","Ex-smoker",8,41,36,99,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",2,"pT1a","pN0","No","negative","MET",59,10,8,0.811,6
+"A157","NSRO-driven in smokers",75,"Male","Chinese","Current smoker",20,75,0,55,"Right lower lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","EGFR",50,9,9,0.796,7
+"A574","NSRO-driven in smokers",72,"Male","Chinese","Ex-smoker",10,37,35,40,"Right middle lobe","Lobectomy","Adenocarcinoma","IB",2,"pT2a","pN0","No","negative","EGFR",62,18,3,0.698,4
+"A150","NSRO-driven in smokers",47,"Male","Chinese","Ex-smoker",18,20,27,0.5,"Left lower lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","Yes","negative","EGFR",38,9,7,0.761,7
+"A379","NSRO-driven in smokers",62,"Male","Chinese","Current smoker",28,62,0,34,"Right lower lobe","Lobectomy","Adenocarcinoma","IIIA",6.7,"pT2b","pN2","Yes","negative","EGFR",67,10,10,0.85,2
+"A611","NSRO-driven in smokers",57,"Male","Indian","Current smoker",11,57,0,35,"Left lower lobe","Lobectomy","Adenocarcinoma","IIIA",3,"pT1b","pN2","Yes","negative","EGFR",61,35,9,0.421,4
+"A552","NSRO-driven in smokers",39,"Male","Malay","Current smoker",18,39,0,21,"Right middle lobe","Lobectomy","Adenocarcinoma","IIA",3,"pT1b","pN1","Yes","negative","EGFR",52,22,9,0.57,4
+"A600","NSRO-driven in smokers",68,"Male","Chinese","Current smoker",16,68,0,52,"Right lower lobe","Lobectomy","Adenocarcinoma","IA",2.7,"pT1b","pN0","No","negative","HER2",51,24,4,0.517,4
+"A537","NSRO-driven in smokers",79,"Male","Chinese","Ex-smoker",16,70,9,54,"Left upper lobe","Lobectomy","Adenocarcinoma","IIIA",4,"pT2a","pN2","Yes","positive","ALK",60,43,1,0.28,3
+"A234","NSRO-driven in smokers",77,"Male","Chinese","Ex-smoker",21,30,47,7,"Right upper lobe","Lobectomy","Adenocarcinoma","IB",3,"pT2a","pN0","Yes","negative","EGFR",61,41,10,0.319,2
+"A381","NSRO-driven in smokers",66,"Male","Chinese","Ex-smoker",17,26,40,16,"Right upper lobe","Lobectomy","Adenocarcinoma","IIB",4.5,"pT3","pN0","No","negative","EGFR",42,23,1,0.448,3
+"A169","NSRO-driven in smokers",76,"Female","Chinese","Ex-smoker",15,66,10,15,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",1,"pT1a","pN0","No","negative","EGFR",52,43,5,0.161,2
+"A306","Typical smoking",55,"Male","Chinese","Current smoker",17,55,0,38,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",1.4,"pT1a","pN0","No","negative","KRAS",724,551,38,0.237,2
+"A240","Typical smoking",50,"Male","Chinese","Current smoker",18,50,0,40,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",1.5,"pT1a","pN0","Yes","negative","Wild Type",265,56,23,0.757,3
+"A590","Typical smoking",66,"Male","Chinese","Current smoker",10,66,0,168,"Left lower lobe","Lobectomy","Squamous cell carcinoma","IA",2.5,"pT1b","pN0","Yes","negative","Wild Type",209,171,14,0.179,4
+"A301","Typical smoking",72,"Male","Chinese","Current smoker",15,72,0,24,"Right upper lobe","Wedge + lobectomy","Adenocarcinoma","IIA",6.7,"pT2b","pN0","Yes","negative","Wild Type",210,184,12,0.123,5
+"A247","Typical smoking",69,"Male","Chinese","Current smoker",20,69,0,49,"Right lower lobe","Lobectomy","Adenocarcinoma","IA",2.5,"pT1b","pN0","No","negative","KRAS",182,126,11,0.265,2
+"A167","Typical smoking",74,"Male","Chinese","Ex-smoker",17,61,13,55,"Left upper lobe","Lobectomy","Adenocarcinoma","IA",1.5,"pT1a","pN0","No","negative","KRAS",116,22,13,0.776,4
+"A145","Typical smoking",72,"Male","Bangladeshi","Current smoker",22,72,0,25,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",3,"pT1b","pN0","No","negative","KRAS",106,33,13,0.665,3
+"A250","Typical smoking",55,"Male","Chinese","Current smoker",18,55,0,37,"Right upper lobe","Lobectomy","Adenocarcinoma","IA",2,"pT1a","pN0","No","negative","KRAS",144,112,15,0.215,2
+"A158","Typical smoking",63,"Male","Chinese","Current smoker",23,63,0,40,"Right upper lobe","Lobectomy","Adenocarcinoma","IIA",4,"pT2a","pN1","Yes","negative","KRAS",68,25,7,0.629,2
+"A155","Typical smoking",67,"Male","Chinese","Ex-smoker",16,20,47,2,"Left lower lobe","Lobectomy","Adenocarcinoma","IIA",2.5,"pT1b","pN1","No","negative","KRAS",29,11,3,0.608,3
+"A159","Typical smoking",49,"Male","Chinese","Ex-smoker",16,46,3,30,"Right lower lobe","Lobectomy","Adenocarcinoma","IA",2.5,"pT1b","pN0","No","negative","Wild Type",27,11,1,0.58,4

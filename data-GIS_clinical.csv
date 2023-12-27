@@ -1,0 +1,299 @@
+Patient.ID,Adenocarcinoma.subtype.WHO2015,Age,Cohort,EGFR.key.mutations,Fraction.Genome.Altered,Gender,Histological.grade,Mutation.Count,Overall.survival.months,Overall.survival.status,Purity,Smoking.status,Stage,driver.gene,TMB,driver.group
+A152,Adenocarcinoma,59,GSK,"T790M,L858R",0.4472,Female,Poorly differentiated,149,80.5,0:LIVING,0.26,No,IV,EGFR,413,Group 1
+A266,Adenocarcinoma,63,GSK,NA,0.5623,Female,Poorly differentiated,109,36.9,0:LIVING,0.19,No,II,ALK,346,Group 1
+A273,Adenocarcinoma,64,GSK,L858R,0.6987,Female,Moderately differentiated,127,86.13333333,0:LIVING,0.28,No,I,EGFR,341,Group 1
+A102,Adenocarcinoma,73,GSK,L858R,0.1936,Male,Moderately differentiated,125,51.3,0:LIVING,0.31,No,I,EGFR,339,Group 1
+BGI-WG17,Adenocarcinoma,51,BGI,Exon19Del,0.6955,Male,NA,62,8,0:LIVING,0.41,No,III,EGFR,313,Group 1
+A505,Adenocarcinoma,41,GSK,Exon19Del,0.0642,Female,Moderately differentiated,129,35.16666667,1:DECEASED,0.36,No,II,EGFR,312,Group 1
+BGI-RS08,Adenocarcinoma,66,BGI,L858R,0.1902,Female,NA,154,65,0:LIVING,0.14,No,III,EGFR,303,Group 1
+A186,Adenocarcinoma,80,GSK,L858R,0.4306,Female,Moderately differentiated,115,47.46666667,1:DECEASED,0.34,No,I,EGFR,272,Group 1
+A062,Adenocarcinoma,74,GSK,L858R,0.2351,Male,Moderately to Poorly differentiated,109,53.46666667,0:LIVING,0.48,No,IV,EGFR,258,Group 1
+A504,Adenocarcinoma,72,GSK,Exon19Del,0.5132,Female,Well differentiated,96,29.53333333,0:LIVING,0.36,No,I,EGFR,252,Group 1
+A182,Adenocarcinoma,72,GSK,L858R,0.3631,Female,Poorly differentiated,108,34.2,0:LIVING,0.35,No,I,EGFR,247,Group 1
+BGI-WG14,Adenocarcinoma,59,BGI,L858R,0.8064,Male,NA,61,5,0:LIVING,0.24,No,III,EGFR,239,Group 1
+A510,Adenocarcinoma,73,GSK,Exon19Del,0.3142,Male,Moderately differentiated,91,23.5,0:LIVING,0.28,No,III,EGFR,222,Group 1
+A490,Adenocarcinoma,59,GSK,Exon19Del,0.3679,Male,Moderately differentiated,76,99.36666667,0:LIVING,0.4,No,II,EGFR,200,Group 1
+BGI-WG03,Adenocarcinoma,56,BGI,Exon19Del,0.3577,Male,NA,44,16,0:LIVING,0.43,No,III,EGFR,197,Group 1
+A015,Adenocarcinoma,69,GSK,L858R,0.0758,Female,Moderately differentiated,62,28.73333333,1:DECEASED,0.51,No,II,EGFR,194,Group 1
+A364,Adenocarcinoma,79,GSK,Exon19Del,0.0833,Female,Moderately differentiated,83,27.76666667,1:DECEASED,0.66,No,IV,EGFR,194,Group 1
+A066,Adenocarcinoma,72,GSK,L858R,0.2626,Female,Moderately differentiated,80,51.33333333,0:LIVING,0.5,No,I,EGFR,181,Group 1
+A219,Adenocarcinoma,52,GSK,L858R,0.3611,Female,Moderately differentiated,74,97.03333333,0:LIVING,0.41,No,II,EGFR,180,Group 1
+A192,Adenocarcinoma,84,GSK,L858R,0.3384,Female,Moderately differentiated,72,38.76666667,1:DECEASED,0.2,No,III,EGFR,174,Group 1
+A276,Adenocarcinoma,71,GSK,NA,0.3902,Male,Moderately differentiated,74,80,1:DECEASED,0.19,No,III,EGFR,174,Group 1
+A120,Adenocarcinoma,82,GSK,NA,0.3702,Male,NA,78,46.63333333,0:LIVING,0.28,No,I,MET,171,Group 1
+A028,Adenocarcinoma,75,GSK,L858R,0.4545,Male,Moderately differentiated,76,56.7,0:LIVING,0.36,No,I,EGFR,170,Group 1
+BGI-WG16,Adenocarcinoma,41,BGI,L858R,0.4443,Female,NA,44,5,0:LIVING,0.23,No,III,EGFR,167,Group 1
+A146,Adenocarcinoma,73,GSK,L858R,0.6843,Male,Moderately differentiated,69,35.06666667,1:DECEASED,0.39,No,II,EGFR,160,Group 1
+A488,Adenocarcinoma,60,GSK,L858R,0.3428,Female,Moderately differentiated,70,50.9,1:DECEASED,0.2,No,III,EGFR,160,Group 1
+A021,Adenocarcinoma,57,GSK,L858R,0.412,Female,Moderately differentiated,56,54.73333333,0:LIVING,0.42,No,I,EGFR,158,Group 1
+A375,Adenocarcinoma,60,GSK,L858R,0.2835,Female,Moderately differentiated,66,28.63333333,0:LIVING,0.38,No,I,EGFR,157,Group 1
+A222,Adenocarcinoma,61,GSK,L858R,0.4357,Female,Moderately differentiated,58,94.76666667,0:LIVING,0.34,No,I,EGFR,156,Group 1
+A130,Adenocarcinoma,66,GSK,Exon19Del,0.1243,Female,Moderately differentiated,57,47.36666667,0:LIVING,0.46,No,I,EGFR,155,Group 1
+A502,Adenocarcinoma,54,GSK,L858R,0.3251,Female,NA,61,74.23333333,0:LIVING,0.4,No,I,EGFR,155,Group 1
+A185,Adenocarcinoma,59,GSK,Exon19Del,0.5169,Female,NA,64,1.8,1:DECEASED,0.34,No,III,EGFR,154,Group 1
+A207,Adenocarcinoma,59,GSK,Exon19Del,0.6218,Female,Well differentiated,66,111.3666667,0:LIVING,0.27,No,I,EGFR,154,Group 1
+A202,Adenocarcinoma,73,GSK,Exon19Del,0.0703,Female,Well differentiated,59,122.7,0:LIVING,0.74,No,I,EGFR,153,Group 1
+BGI-RS20,Adenocarcinoma,42,BGI,NA,0.4719,Female,NA,66,12,1:DECEASED,0.62,No,III,ERBB2,151,Group 1
+BGI-WG13,Adenocarcinoma,70,BGI,L858R,0.3675,Female,NA,33,13,0:LIVING,0.18,No,III,EGFR,151,Group 1
+A101,Adenocarcinoma,58,GSK,Exon19Del,0.4523,Female,Moderately differentiated,60,51.26666667,0:LIVING,0.43,No,I,EGFR,150,Group 1
+A497,Adenocarcinoma,45,GSK,Exon19Del,0.6054,Female,Moderately differentiated,62,43.43333333,1:DECEASED,0.24,No,III,EGFR,150,Group 1
+A136,Adenocarcinoma,72,GSK,L858R,0.3046,Female,NA,71,41.96666667,0:LIVING,0.44,No,I,EGFR,145,Group 1
+A217,Adenocarcinoma,71,GSK,Exon19Del,0.4129,Male,Well differentiated,53,104.2666667,0:LIVING,0.36,No,III,EGFR,143,Group 1
+A494,Adenocarcinoma,67,GSK,Exon19Del,0.129,Female,Well differentiated,62,88.86666667,0:LIVING,0.68,No,I,EGFR,135,Group 1
+A017,Adenocarcinoma,52,GSK,L858R,0.8972,Female,NA,64,53.46666667,0:LIVING,0.25,No,II,EGFR,134,Group 1
+A302,Adenocarcinoma,68,GSK,L858R,0.5212,Female,Moderately differentiated,51,29.8,0:LIVING,0.23,No,I,EGFR,133,Group 1
+BGI-WG11,Adenocarcinoma,68,BGI,NA,0.6361,Female,NA,42,16,0:LIVING,0.2,No,III,EGFR,133,Group 1
+A074,Adenocarcinoma,78,GSK,L858R,0.5106,Female,Poorly differentiated,55,20.06666667,1:DECEASED,0.18,No,IV,EGFR,132,Group 1
+A037,Adenocarcinoma,66,GSK,L858R,0.5628,Female,Moderately differentiated,47,50.33333333,0:LIVING,0.31,No,II,EGFR,130,Group 1
+A269,Adenocarcinoma,66,GSK,L858R,0.328,Female,Moderately differentiated,48,64.1,0:LIVING,0.46,No,I,EGFR,130,Group 1
+A521,Adenocarcinoma,55,GSK,L858R,0.434,Female,Moderately differentiated,47,22.43333333,0:LIVING,0.18,No,I,EGFR,129,Group 1
+A281,Adenocarcinoma,66,GSK,L858R,0.2966,Male,NA,52,69.1,0:LIVING,0.21,No,I,EGFR,128,Group 1
+A284,Adenocarcinoma,58,GSK,Exon19Del,0.3202,Female,Moderately differentiated,60,68.8,0:LIVING,0.33,No,II,EGFR,127,Group 1
+A068,Adenocarcinoma,79,GSK,Exon19Del,0.2468,Female,Poorly differentiated,45,51,0:LIVING,0.14,No,I,EGFR,126,Group 1
+A323,Adenocarcinoma,63,GSK,Exon19Del,0.6199,Male,Moderately differentiated,47,29.13333333,0:LIVING,0.27,No,II,EGFR,125,Group 1
+A204,Adenocarcinoma,70,GSK,Exon19Del,0.1869,Female,Moderately differentiated,60,116.4333333,0:LIVING,0.78,No,III,EGFR,124,Group 1
+A139,Adenocarcinoma,76,GSK,L858R,0.5214,Female,Moderately differentiated,46,5.066666667,1:DECEASED,0.28,No,I,EGFR,123,Group 1
+A434,Adenocarcinoma,67,GSK,Exon19Del,0.4587,Female,Moderately differentiated,43,26.83333333,0:LIVING,0.26,No,II,EGFR,121,Group 1
+A111,Adenocarcinoma,62,GSK,Exon19Del,0.126,Female,Moderately differentiated,48,48.76666667,0:LIVING,0.76,No,I,EGFR,120,Group 1
+A168,Adenocarcinoma,64,GSK,Exon19Del,0.0287,Male,Moderately differentiated,48,21.73333333,0:LIVING,0.46,No,III,EGFR,120,Group 1
+A485,Adenocarcinoma,72,GSK,Exon19Del,0.1744,Female,Well differentiated,55,118.1333333,0:LIVING,0.73,No,I,EGFR,119,Group 1
+A282,Adenocarcinoma,72,GSK,Exon19Del,0.2763,Female,Moderately differentiated,43,69.2,0:LIVING,0.6,No,II,EGFR,117,Group 1
+A156,Adenocarcinoma,61,GSK,NA,0.433,Female,Moderately differentiated,44,37.7,0:LIVING,0.31,No,I,EGFR,116,Group 1
+A071,Adenocarcinoma,76,GSK,Exon19Del,0.2605,Female,NA,55,52.36666667,0:LIVING,0.35,No,I,EGFR,115,Group 1
+A206,Adenocarcinoma,78,GSK,NA,0.3857,Male,Moderately differentiated,49,112.1,0:LIVING,0.22,No,I,ERBB2,115,Group 1
+BGI-RS35,Adenocarcinoma,72,BGI,Exon19Del,0.4152,Male,NA,67,49,1:DECEASED,0.33,No,I,EGFR,114,Group 1
+A203,Adenocarcinoma,55,GSK,L858R,0.1359,Male,Well differentiated,41,121.9666667,0:LIVING,0.23,No,II,EGFR,113,Group 1
+A435,Adenocarcinoma,68,GSK,Exon19Del,0.5382,Female,Moderately differentiated,53,26.53333333,0:LIVING,0.2,No,II,EGFR,113,Group 1
+A277,Adenocarcinoma,70,GSK,Exon19Del,0.0884,Female,NA,45,83.76666667,0:LIVING,0.83,No,II,EGFR,109,Group 1
+BGI-WG22,Adenocarcinoma,34,BGI,L858R,0.1698,Female,NA,26,24,0:LIVING,0.23,No,III,EGFR,109,Group 1
+A511,Adenocarcinoma,63,GSK,L858R,0.375,Male,Poorly differentiated,40,29.66666667,0:LIVING,0.17,No,II,EGFR,108,Group 1
+A310,Adenocarcinoma,67,GSK,L858R,0.2747,Male,Well differentiated,53,28.36666667,0:LIVING,0.56,No,I,EGFR,107,Group 1
+BGI-WG12,Adenocarcinoma,57,BGI,L858R,0.0869,Female,NA,34,13,0:LIVING,0.17,No,III,EGFR,107,Group 1
+A316,Adenocarcinoma,77,GSK,L858R,0.5716,Female,Moderately differentiated,42,30.73333333,0:LIVING,0.28,No,I,EGFR,105,Group 1
+A272,Adenocarcinoma,43,GSK,NA,0.1679,Female,Moderately differentiated,46,53.63333333,0:LIVING,0.46,No,I,ALK,104,Group 1
+A503,Adenocarcinoma,60,GSK,Exon19Del,0.3098,Female,Moderately to Poorly differentiated,43,34.83333333,1:DECEASED,0.44,No,I,EGFR,104,Group 1
+A162,Adenocarcinoma,67,GSK,Exon19Del,0.6644,Male,Moderately differentiated,43,31.43333333,0:LIVING,0.32,No,III,EGFR,103,Group 1
+A249,Adenocarcinoma,53,GSK,Exon19Del,0.374,Female,NA,45,31.5,0:LIVING,0.19,No,II,EGFR,102,Group 1
+A426,Adenocarcinoma,65,GSK,NA,0.1038,Female,Moderately differentiated,34,26.96666667,0:LIVING,0.57,No,I,EGFR,101,Group 1
+A428,Adenocarcinoma,66,GSK,Exon19Del,0.0965,Male,Moderately differentiated,36,21.86666667,0:LIVING,0.67,No,II,EGFR,101,Group 1
+A063,Adenocarcinoma,70,GSK,NA,0.1755,Female,Moderately differentiated,39,51.13333333,0:LIVING,0.78,No,I,ALK,99,Group 1
+A322,Adenocarcinoma,70,GSK,NA,0.1802,Female,Moderately differentiated,32,23.13333333,1:DECEASED,0.6,No,I,ALK,99,Group 1
+A278,Adenocarcinoma,73,GSK,Exon19Del,0.0673,Female,NA,39,82.83333333,0:LIVING,0.34,No,I,EGFR,98,Group 1
+A100,Adenocarcinoma,73,GSK,Exon20Ins,0.2559,Female,Well differentiated,39,47.23333333,0:LIVING,0.2,No,I,EGFR,97,Group 1
+A295,Adenocarcinoma,74,GSK,Exon19Del,0.1898,Female,Moderately differentiated,34,52.96666667,0:LIVING,0.59,No,I,EGFR,96,Group 1
+A517,Adenocarcinoma,68,GSK,L858R,0.8037,Female,Moderately differentiated,43,24.76666667,0:LIVING,0.16,No,III,EGFR,96,Group 1
+BGI-EX02,Adenocarcinoma,45,BGI,L858R,0.4814,Male,NA,43,13,0:LIVING,0.17,No,III,EGFR,94,Group 1
+BGI-RS32,Adenocarcinoma,67,BGI,Exon19Del,0.2287,Female,NA,40,17,1:DECEASED,0.22,No,I,EGFR,94,Group 1
+A114,Adenocarcinoma,61,GSK,L858R,0.5536,Female,Moderately differentiated,43,46.56666667,0:LIVING,0.17,No,II,EGFR,93,Group 1
+A153,Adenocarcinoma,78,GSK,L858R,0.1521,Male,Moderately differentiated,34,39.03333333,0:LIVING,0.43,No,I,EGFR,93,Group 1
+A538,Adenocarcinoma,59,GSK,Exon19Del,0.1309,Female,Moderately differentiated,25,22.3,0:LIVING,0.12,No,I,EGFR,92,Group 1
+A149,Adenocarcinoma,76,GSK,L858R,0.1836,Male,Well differentiated,32,39.46666667,0:LIVING,0.21,No,I,EGFR,87,Group 1
+A493,Adenocarcinoma,58,GSK,L858R,0.0317,Female,Moderately differentiated,44,48.36666667,1:DECEASED,0.24,No,I,EGFR,87,Group 1
+A117,Adenocarcinoma,64,GSK,L858R,0.0372,Female,Moderately differentiated,34,49.96666667,0:LIVING,0.49,No,I,EGFR,83,Group 1
+A134,Adenocarcinoma,52,GSK,Exon19Del,0.3731,Female,Moderately differentiated,34,44.6,0:LIVING,0.71,No,I,EGFR,83,Group 1
+A233,Adenocarcinoma,81,GSK,NA,0.0986,Male,Well to Moderately differentiated,27,32.9,0:LIVING,0.16,No,I,MET,83,Group 1
+BGI-RS39,Adenocarcinoma,55,BGI,Exon19Del,0.3904,Female,NA,34,45,1:DECEASED,0.55,No,II,EGFR,82,Group 1
+A483,Adenocarcinoma,58,GSK,Exon19Del,0.0469,Female,Well differentiated,33,129.2666667,0:LIVING,0.21,No,III,EGFR,79,Group 1
+A255,Adenocarcinoma,63,GSK,L858R,0.0986,Male,Moderately differentiated,24,25.3,1:DECEASED,0.31,No,I,EGFR,77,Group 1
+A239,Adenocarcinoma,53,GSK,L858R,0.151,Male,Moderately differentiated,34,6.333333333,0:LIVING,0.14,No,I,EGFR,76,Group 1
+BGI-EX04,Adenocarcinoma,67,BGI,Exon19Del,0.3174,Female,NA,33,6,0:LIVING,0.3,No,III,EGFR,76,Group 1
+BGI-RS16,Adenocarcinoma,56,BGI,Exon19Del,0.7131,Female,NA,41,78,0:LIVING,0.26,No,III,EGFR,76,Group 1
+A122,Adenocarcinoma,63,GSK,NA,0.2107,Male,Moderately differentiated,28,46.86666667,0:LIVING,0.15,No,II,EGFR,74,Group 1
+BGI-RS21,Adenocarcinoma,67,BGI,NA,0.6318,Female,NA,38,61,0:LIVING,0.21,No,III,ERBB2,73,Group 1
+A243,Adenocarcinoma,62,GSK,L858R,0.4606,Female,Poorly differentiated,26,33.8,0:LIVING,0.37,No,III,EGFR,71,Group 1
+A432,Adenocarcinoma,64,GSK,Exon19Del,0.3597,Female,Moderately differentiated,33,27.9,0:LIVING,0.28,No,I,EGFR,71,Group 1
+A315,Adenocarcinoma,64,GSK,Exon19Del,0.218,Female,Well to Moderately differentiated,26,30,0:LIVING,0.2,No,III,EGFR,70,Group 1
+A380,Adenocarcinoma,61,GSK,Exon19Del,0.2934,Female,Moderately differentiated,28,33.03333333,0:LIVING,0.12,No,I,EGFR,70,Group 1
+A430,Adenocarcinoma,70,GSK,Exon19Del,0.2649,Female,Moderately differentiated,27,13.13333333,1:DECEASED,0.24,No,III,EGFR,69,Group 1
+BGI-RS17,Adenocarcinoma,53,BGI,NA,0.4605,Female,NA,33,47,0:LIVING,0.16,No,III,EGFR,69,Group 1
+A188,Adenocarcinoma,57,GSK,NA,0.2665,Female,Moderately differentiated,29,5.166666667,1:DECEASED,0.28,No,I,ALK,68,Group 1
+A112,Adenocarcinoma,61,GSK,Exon20Ins,0.0901,Female,Moderately differentiated,22,49.06666667,0:LIVING,0.64,No,I,EGFR,64,Group 1
+BGI-RS02,Adenocarcinoma,58,BGI,NA,0.4438,Female,NA,30,23,1:DECEASED,0.22,No,III,EGFR,64,Group 1
+A486,Adenocarcinoma,45,GSK,Exon19Del,0.0678,Female,Well differentiated,25,85.26666667,1:DECEASED,0.13,No,I,EGFR,59,Group 1
+A165,Adenocarcinoma,44,GSK,L858R,0.3269,Female,Moderately differentiated,21,36.4,0:LIVING,0.16,No,I,EGFR,56,Group 1
+A104,Adenocarcinoma,70,GSK,Exon19Del,0.1216,Male,Moderately differentiated,24,46.3,0:LIVING,0.32,No,I,EGFR,54,Group 1
+A072,Adenocarcinoma,60,GSK,L858R,0.4843,Female,Moderately differentiated,25,49.93333333,0:LIVING,0.19,No,I,EGFR,53,Group 1
+A512,Adenocarcinoma,55,GSK,Exon19Del,0.1008,Male,Moderately differentiated,18,21.66666667,0:LIVING,0.73,No,I,EGFR,51,Group 1
+A027,Adenocarcinoma,58,GSK,Exon19Del,0.1158,Female,Moderately differentiated,19,50.93333333,0:LIVING,0.27,No,I,EGFR,50,Group 1
+A283,Adenocarcinoma,67,GSK,NA,0.0054,Female,Moderately differentiated,24,67.26666667,0:LIVING,0.17,No,I,EGFR,49,Group 1
+A194,Adenocarcinoma,54,GSK,NA,0.0988,Female,Well differentiated,14,34.4,1:DECEASED,0.15,No,IV,ALK,41,Group 1
+A514,Adenocarcinoma,56,GSK,L858R,0.1269,Female,Moderately differentiated,15,25.06666667,0:LIVING,0.12,No,I,EGFR,31,Group 1
+BGI-RS37,Adenocarcinoma,54,BGI,NA,0.1089,Female,NA,16,56,0:LIVING,0.13,No,I,ERBB2,29,Group 1
+A496,Adenocarcinoma,53,GSK,L858R,0.0156,Female,Moderately differentiated,6,92.9,0:LIVING,0.13,No,III,EGFR,10,Group 1
+BGI-RS10,Adenocarcinoma,51,BGI,NA,0.3085,Male,NA,392,20,1:DECEASED,0.18,No,III,KRAS,795,Group 4
+BGI-RS40,Adenocarcinoma,41,BGI,NA,0.3906,Male,NA,279,22,0:LIVING,0.6,No,II,Wild Type,599,Group 4
+BGI-RS56,Adenocarcinoma,62,BGI,NA,0.5411,Male,NA,269,58,0:LIVING,0.16,No,II,KRAS,469,Group 4
+BGI-WG23,Adenocarcinoma,73,BGI,NA,0.1111,Male,NA,87,16,0:LIVING,0.43,No,III,KRAS,467,Group 4
+BGI-RS27,Adenocarcinoma,70,BGI,NA,0.4021,Male,NA,216,20,1:DECEASED,0.59,No,III,KRAS,435,Group 4
+BGI-RS11,Adenocarcinoma,60,BGI,NA,0.1641,Female,NA,222,61,0:LIVING,0.16,No,III,Wild Type,399,Group 4
+BGI-WG18,Adenocarcinoma,65,BGI,NA,0.4989,Female,NA,80,7,0:LIVING,0.4,No,III,Wild Type,387,Group 4
+A260,Adenocarcinoma,61,GSK,NA,0.2818,Female,NA,125,42,1:DECEASED,0.5,No,I,KRAS,351,Group 4
+BGI-RS59,Adenocarcinoma,74,BGI,NA,0.3771,Male,NA,186,NA,NA,0.29,No,II,KRAS,339,Group 4
+BGI-WG20,Adenocarcinoma,62,BGI,NA,0.1632,Male,NA,97,7,0:LIVING,0.37,No,III,Wild Type,332,Group 4
+BGI-WG04,Adenocarcinoma,25,BGI,NA,0.1342,Female,NA,28,17,0:LIVING,0.54,No,IV,Wild Type,318,Group 4
+BGI-RS13,Adenocarcinoma,67,BGI,NA,0.2249,Male,NA,152,29,1:DECEASED,0.18,No,IV,BRAF,306,Group 4
+BGI-RS07,Adenocarcinoma,72,BGI,NA,0.491,Male,NA,166,6,1:DECEASED,0.18,No,III,KRAS,305,Group 4
+BGI-RS28,Adenocarcinoma,62,BGI,NA,0.4977,Male,NA,120,32,1:DECEASED,0.26,No,I,Wild Type,257,Group 4
+BGI-RS50,Adenocarcinoma,65,BGI,NA,0.4499,Male,NA,133,5,1:DECEASED,0.58,No,II,Wild Type,243,Group 4
+BGI-RS55,Adenocarcinoma,63,BGI,NA,0.3622,Male,NA,98,57,0:LIVING,0.32,No,II,Wild Type,214,Group 4
+A262,Adenocarcinoma,64,GSK,NA,0.1308,Female,Moderately differentiated,82,61.5,0:LIVING,0.86,No,II,KRAS,212,Group 4
+A241,Adenocarcinoma,70,GSK,NA,0.1758,Female,Moderately to Poorly differentiated,87,34.16666667,0:LIVING,0.31,No,I,Wild Type,208,Group 4
+A285,Adenocarcinoma,64,GSK,NA,0.2669,Female,NA,76,66.8,0:LIVING,0.31,No,I,Wild Type,173,Group 4
+A495,Adenocarcinoma,53,GSK,NA,0.3166,Male,Moderately differentiated,59,92.46666667,0:LIVING,0.44,No,III,Wild Type,165,Group 4
+BGI-RS15,Adenocarcinoma,64,BGI,NA,0.0049,Male,NA,88,41,1:DECEASED,0.16,No,III,Wild Type,162,Group 4
+A307,Adenocarcinoma,56,GSK,NA,0.5838,Male,Moderately differentiated,47,26.16666667,1:DECEASED,0.4,No,III,Wild Type,139,Group 4
+A073,Adenocarcinoma,51,GSK,NA,0.573,Male,Moderately differentiated,53,50.2,0:LIVING,0.52,No,I,Wild Type,130,Group 4
+BGI-RS48,Adenocarcinoma,36,BGI,NA,0.5407,Male,NA,73,NA,1:DECEASED,0.24,No,II,BRAF,125,Group 4
+A275,Adenocarcinoma,55,GSK,NA,0.4092,Female,Moderately differentiated,54,84.43333333,0:LIVING,0.17,No,II,Wild Type,122,Group 4
+A377,Adenocarcinoma,71,GSK,NA,0.6748,Female,Moderately differentiated,49,26.4,0:LIVING,0.16,No,I,Wild Type,120,Group 4
+A534,Adenocarcinoma,77,GSK,NA,0.1284,Female,Moderately differentiated,41,21.2,0:LIVING,0.84,No,I,BRAF,116,Group 4
+BGI-RS25,Adenocarcinoma,59,BGI,NA,0.551,Female,NA,46,22,1:DECEASED,0.25,No,III,Wild Type,113,Group 4
+BGI-WG06,Adenocarcinoma,48,BGI,NA,0.1579,Female,NA,30,13,0:LIVING,0.34,No,III,Wild Type,113,Group 4
+A144,Adenocarcinoma,74,GSK,NA,0.3915,Male,Poorly differentiated,45,25.76666667,1:DECEASED,0.72,No,II,Wild Type,101,Group 4
+A274,Adenocarcinoma,44,GSK,NA,0.3387,Female,Well differentiated,45,86.26666667,0:LIVING,0.26,No,I,Wild Type,98,Group 4
+A205,Adenocarcinoma,79,GSK,NA,0.1901,Female,Moderately differentiated,37,91.03333333,1:DECEASED,0.17,No,I,BRAF,96,Group 4
+BGI-RS45,Adenocarcinoma,77,BGI,NA,0.6164,Female,NA,44,28,1:DECEASED,0.2,No,III,Wild Type,86,Group 4
+A190,Adenocarcinoma,65,GSK,NA,0.2523,Female,Moderately differentiated,26,35.33333333,1:DECEASED,0.51,No,II,KRAS,84,Group 4
+A191,Adenocarcinoma,62,GSK,NA,0.1607,Male,Moderately differentiated,35,36.06666667,1:DECEASED,0.62,No,I,BRAF,84,Group 4
+BGI-RS23,Adenocarcinoma,70,BGI,NA,0.4504,Male,NA,38,80,0:LIVING,0.28,No,III,Wild Type,83,Group 4
+BGI-WG21,Adenocarcinoma,41,BGI,NA,0.0658,Female,NA,25,6,0:LIVING,0.15,No,II,Wild Type,81,Group 4
+A163,Adenocarcinoma,57,GSK,NA,0.4246,Female,Moderately differentiated,24,9.433333333,0:LIVING,0.37,No,III,Wild Type,75,Group 4
+A008,Adenocarcinoma,56,GSK,NA,0.1318,Female,Moderately differentiated,29,23.1,1:DECEASED,0.34,No,III,Wild Type,71,Group 4
+A259,Adenocarcinoma,37,GSK,NA,0.2446,Female,Moderately differentiated,32,87.46666667,0:LIVING,0.33,No,III,Wild Type,71,Group 4
+BGI-RS53,Adenocarcinoma,72,BGI,NA,0.3559,Female,NA,30,74,0:LIVING,0.16,No,I,Wild Type,70,Group 4
+BGI-RS22,Adenocarcinoma,62,BGI,NA,0.1934,Male,NA,37,24,1:DECEASED,0.14,No,IV,Wild Type,66,Group 4
+A270,Adenocarcinoma,62,GSK,NA,0.1877,Female,Moderately differentiated,28,61.46666667,0:LIVING,0.13,No,I,Wild Type,60,Group 4
+A033,Adenocarcinoma,44,GSK,NA,0.1373,Female,Poorly differentiated,17,50.9,0:LIVING,0.26,No,II,Wild Type,57,Group 4
+A368,Adenocarcinoma,60,GSK,NA,0.1234,Female,NA,24,29.6,1:DECEASED,0.17,No,IV,Wild Type,54,Group 4
+BGI-RS52,Adenocarcinoma,57,BGI,NA,0.657,Female,NA,24,48,0:LIVING,0.12,No,II,Wild Type,52,Group 4
+BGI-RS46,Adenocarcinoma,68,BGI,NA,0.0659,Male,NA,25,58,1:DECEASED,0.2,No,II,Wild Type,50,Group 4
+BGI-RS09,Adenocarcinoma,57,BGI,NA,0.61,Female,NA,25,12,1:DECEASED,0.12,No,IV,Wild Type,46,Group 4
+BGI-RS01,Adenocarcinoma,57,BGI,NA,0.5636,Male,NA,25,37,1:DECEASED,0.16,No,III,Wild Type,43,Group 4
+BGI-RS41,Adenocarcinoma,49,BGI,NA,0.0381,Female,NA,19,70,0:LIVING,0.14,No,I,Wild Type,43,Group 4
+BGI-RS29,Adenocarcinoma,57,BGI,NA,0.1703,Female,NA,18,54,0:LIVING,0.19,No,I,Wild Type,40,Group 4
+BGI-WG19,Adenocarcinoma,61,BGI,NA,0.0724,Female,NA,15,8,0:LIVING,0.16,No,III,Wild Type,38,Group 4
+A209,Adenocarcinoma,62,GSK,NA,5.00E-04,Male,Well differentiated,14,57.73333333,0:LIVING,0.24,No,I,Wild Type,36,Group 4
+BGI-RS12,Adenocarcinoma,59,BGI,NA,0.3775,Female,NA,23,66,0:LIVING,0.19,No,III,Wild Type,34,Group 4
+BGI-RS47,Adenocarcinoma,49,BGI,NA,0.1525,Female,NA,18,56,0:LIVING,0.2,No,II,Wild Type,31,Group 4
+A212,Adenocarcinoma,68,GSK,NA,0.0049,Female,Moderately differentiated,9,108.4666667,0:LIVING,0.15,No,I,Wild Type,30,Group 4
+A252,Adenocarcinoma,65,GSK,NA,0,Female,Moderately differentiated,9,33.16666667,0:LIVING,0.27,No,I,Wild Type,29,Group 4
+A268,Adenocarcinoma,70,GSK,NA,0.0024,Female,Well to Moderately differentiated,12,65.86666667,0:LIVING,0.26,No,I,Wild Type,25,Group 4
+A215,Adenocarcinoma,54,GSK,NA,0.0284,Female,Well differentiated,5,103.5333333,0:LIVING,0.28,No,I,Wild Type,11,Group 4
+A221,Adenocarcinoma,72,GSK,NA,0.0154,Female,Moderately differentiated,3,95.16666667,0:LIVING,0.3,No,I,Wild Type,10,Group 4
+A006,Adenocarcinoma,56,GSK,NA,0.1539,Female,Moderately differentiated,1,61.6,0:LIVING,0.1,No,I,Wild Type,9,Group 4
+A224,Adenocarcinoma,68,GSK,NA,0.0011,Male,NA,4,26.6,1:DECEASED,0.25,No,III,Wild Type,7,Group 4
+A500,Adenocarcinoma,70,GSK,NA,0.0074,Female,Moderately differentiated,3,114.9,1:DECEASED,0.3,No,I,Wild Type,7,Group 4
+A507,Adenocarcinoma,72,GSK,NA,3.00E-04,Female,Well to Moderately differentiated,2,40.5,1:DECEASED,0.26,No,I,Wild Type,7,Group 4
+A138,Adenocarcinoma,53,GSK,NA,0.0263,Female,Moderately differentiated,1,54,1:DECEASED,0.24,No,III,Wild Type,4,Group 4
+A501,Adenocarcinoma,68,GSK,NA,0.0152,Female,Poorly differentiated,2,15.23333333,1:DECEASED,0.21,No,I,Wild Type,2,Group 4
+BGI-WG24,Adenocarcinoma,67,BGI,Exon19Del,0.4268,Male,NA,89,17,0:LIVING,0.63,Yes,IV,EGFR,589,Group 2
+A220,Adenocarcinoma,60,GSK,L858R,0.5028,Female,Moderately differentiated,225,98.56666667,0:LIVING,0.33,Yes,I,EGFR,533,Group 2
+A349,Adenocarcinoma,74,GSK,NA,0.6955,Male,NA,124,17.2,1:DECEASED,0.39,Yes,IV,EGFR,310,Group 2
+A150,Adenocarcinoma,48,GSK,Exon19Del,0.2423,Male,Moderately differentiated,130,34.73333333,0:LIVING,0.45,Yes,I,EGFR,308,Group 2
+A208,Adenocarcinoma,77,GSK,NA,0.3249,Male,Moderately differentiated,124,110.5666667,0:LIVING,0.25,Yes,I,MET,308,Group 2
+A197,Adenocarcinoma,52,GSK,NA,0.4271,Male,Moderately differentiated,104,31.66666667,1:DECEASED,0.6,Yes,I,EGFR,264,Group 2
+BGI-RS34,Adenocarcinoma,74,BGI,NA,0.1336,Male,NA,141,55,1:DECEASED,0.18,Yes,I,MET,263,Group 2
+BGI-RS18,Adenocarcinoma,62,BGI,Exon19Del,0.1993,Male,NA,87,NA,1:DECEASED,0.17,Yes,III,EGFR,194,Group 2
+A177,Adenocarcinoma,77,GSK,NA,0.2817,Male,Poorly differentiated,71,34.5,0:LIVING,0.3,Yes,I,MET,192,Group 2
+A519,Adenocarcinoma,69,GSK,Exon19Del,0.732,Female,Moderately differentiated,77,24.06666667,0:LIVING,0.37,Yes,III,EGFR,184,Group 2
+A265,Adenocarcinoma,65,GSK,L858R,0.3309,Female,NA,70,1.5,0:LIVING,0.18,Yes,I,EGFR,181,Group 2
+A148,Adenocarcinoma,57,GSK,L858R,0.5253,Male,Moderately differentiated,60,40.36666667,0:LIVING,0.24,Yes,III,EGFR,172,Group 2
+A261,Adenocarcinoma,45,GSK,NA,0.2878,Male,NA,71,46.26666667,1:DECEASED,0.35,Yes,I,ERBB2,168,Group 2
+A169,Adenocarcinoma,76,GSK,NA,0.0798,Female,Moderately differentiated,70,34.66666667,0:LIVING,0.54,Yes,NA,EGFR,155,Group 2
+A103,Adenocarcinoma,63,GSK,L858R,0.5467,Female,Moderately differentiated,60,50.3,0:LIVING,0.16,Yes,I,EGFR,146,Group 2
+BGI-RS30,Adenocarcinoma,61,BGI,Exon19Del,0.5865,Male,NA,70,59,1:DECEASED,0.26,Yes,I,EGFR,134,Group 2
+A279,Adenocarcinoma,59,GSK,L858R,0.6644,Male,NA,60,78.83333333,0:LIVING,0.17,Yes,I,EGFR,133,Group 2
+BGI-RS58,Adenocarcinoma,78,BGI,L858R,0.8101,Female,NA,71,60,0:LIVING,0.15,Yes,I,EGFR,124,Group 2
+A425,Adenocarcinoma,56,GSK,L858R,0.5774,Female,Moderately differentiated,51,28.73333333,0:LIVING,0.18,Yes,NA,EGFR,120,Group 2
+A157,Adenocarcinoma,74,GSK,L858R,0.6893,Male,Moderately to Poorly differentiated,53,34.93333333,0:LIVING,0.25,Yes,I,EGFR,118,Group 2
+BGI-RS54,Adenocarcinoma,67,BGI,L858R,0.6699,Male,NA,57,49,0:LIVING,0.23,Yes,II,EGFR,116,Group 2
+A381,Adenocarcinoma,66,GSK,NA,0.1552,Male,Moderately differentiated,42,27.43333333,0:LIVING,0.67,Yes,I,EGFR,110,Group 2
+A492,Adenocarcinoma,47,GSK,Exon19Del,0.4031,Male,Moderately differentiated,41,55.66666667,1:DECEASED,0.21,Yes,I,EGFR,103,Group 2
+A213,Adenocarcinoma,76,GSK,Exon19Del,0.2448,Male,Well differentiated,40,102.2,0:LIVING,0.22,Yes,I,EGFR,96,Group 2
+A187,Adenocarcinoma,38,GSK,Exon20Ins,0.6395,Female,Moderately differentiated,29,12.5,1:DECEASED,0.22,Yes,III,EGFR,74,Group 2
+A320,Adenocarcinoma,75,GSK,"T790M,L858R",0.1386,Female,Moderately differentiated,23,28.03333333,0:LIVING,0.3,Yes,I,EGFR,69,Group 2
+A524,Adenocarcinoma,73,GSK,Exon19Del,0.2194,Male,Moderately differentiated,23,5.633333333,1:DECEASED,0.14,Yes,I,EGFR,61,Group 2
+BGI-RS38,Adenocarcinoma,58,BGI,L858R,0.2082,Male,NA,28,62,0:LIVING,0.57,Yes,II,EGFR,55,Group 2
+BGI-RS44,Adenocarcinoma,67,BGI,NA,0.1719,Male,NA,16,58,0:LIVING,0.2,Yes,I,EGFR,37,Group 2
+A499,Adenocarcinoma,70,GSK,L858R,0.0608,Male,Moderately differentiated,11,84.2,0:LIVING,0.12,Yes,I,EGFR,35,Group 2
+A147,Adenocarcinoma,57,GSK,Exon19Del,0.006,Male,Moderately differentiated,10,43,0:LIVING,0.45,Yes,III,EGFR,16,Group 2
+A110,Adenocarcinoma,72,GSK,NA,0.5086,Male,Moderately differentiated,973,17.2,1:DECEASED,0.48,Yes,II,Wild Type,2293,Group 3
+A306,Adenocarcinoma,55,GSK,NA,0.6742,Male,Moderately differentiated,958,30.83333333,0:LIVING,0.18,Yes,I,KRAS,2275,Group 3
+BGI-WG08,Adenocarcinoma,63,BGI,NA,0.5251,Male,NA,661,16,0:LIVING,0.19,Yes,III,Wild Type,1747,Group 3
+BGI-RS60,Adenocarcinoma,60,BGI,NA,0.5077,Male,NA,866,62,0:LIVING,0.25,Yes,I,Wild Type,1706,Group 3
+A231,Adenocarcinoma,71,GSK,NA,0.6094,Male,NA,620,47.96666667,1:DECEASED,0.37,Yes,II,KRAS,1615,Group 3
+A109,Adenocarcinoma,79,GSK,NA,0.3917,Male,Moderately to Poorly differentiated,644,33.7,1:DECEASED,0.23,Yes,I,Wild Type,1564,Group 3
+A532,Adenocarcinoma,62,GSK,NA,0.4239,Male,Moderately differentiated,661,17.8,0:LIVING,0.18,Yes,I,Wild Type,1504,Group 3
+A016,Adenocarcinoma,78,GSK,NA,0.3153,Male,Poorly differentiated,590,52.46666667,0:LIVING,0.16,Yes,I,KRAS,1454,Group 3
+BGI-WG10,Adenocarcinoma,65,BGI,NA,0.2053,Male,NA,451,15,0:LIVING,0.29,Yes,III,Wild Type,1421,Group 3
+A228,Adenocarcinoma,66,GSK,NA,0.6336,Male,NA,538,1.633333333,1:DECEASED,0.57,Yes,IV,KRAS.BRAF,1281,Group 3
+A210,Adenocarcinoma,50,GSK,NA,0.3829,Male,Poorly differentiated,503,105.3,0:LIVING,0.32,Yes,I,KRAS,1264,Group 3
+A183,Adenocarcinoma,75,GSK,NA,0.2692,Male,Moderately differentiated,502,70.63333333,1:DECEASED,0.38,Yes,II,Wild Type,1238,Group 3
+A131,Adenocarcinoma,69,GSK,NA,0.6822,Male,NA,486,35.8,1:DECEASED,0.8,Yes,III,Wild Type,1201,Group 3
+A216,Adenocarcinoma,61,GSK,NA,0.2934,Male,Moderately differentiated,474,104.9333333,0:LIVING,0.37,Yes,III,Wild Type,1152,Group 3
+BGI-RS57,Adenocarcinoma,71,BGI,NA,0.3946,Male,NA,490,10,1:DECEASED,0.38,Yes,II,Wild Type,1028,Group 3
+BGI-EX03,Adenocarcinoma,60,BGI,NA,0.6506,Male,NA,497,12,0:LIVING,0.14,Yes,III,BRAF,1007,Group 3
+A230,Adenocarcinoma,68,GSK,NA,0.3291,Male,Moderately differentiated,393,0.7,1:DECEASED,0.76,Yes,IV,Wild Type,990,Group 3
+A271,Adenocarcinoma,70,GSK,NA,0.3405,Male,Moderately differentiated,385,58.53333333,0:LIVING,0.17,Yes,I,Wild Type,950,Group 3
+A199,Adenocarcinoma,69,GSK,NA,0.3545,Male,Moderately differentiated,351,30.33333333,1:DECEASED,0.15,Yes,I,Wild Type,867,Group 3
+A012,Adenocarcinoma,69,GSK,NA,0.3385,Male,Moderately to Poorly differentiated,330,58.26666667,0:LIVING,0.38,Yes,I,KRAS,824,Group 3
+A143,Adenocarcinoma,68,GSK,NA,0.4286,Male,Poorly differentiated,259,5.533333333,1:DECEASED,0.24,Yes,IV,Wild Type,687,Group 3
+BGI-EX09,Adenocarcinoma,52,BGI,NA,0.3529,Male,NA,323,13,1:DECEASED,0.3,Yes,III,KRAS,653,Group 3
+A509,Adenocarcinoma,75,GSK,NA,0.2953,Male,Moderately differentiated,224,59.46666667,0:LIVING,0.34,Yes,II,KRAS,596,Group 3
+BGI-RS14,Adenocarcinoma,55,BGI,NA,0.4176,Male,NA,293,60,1:DECEASED,0.31,Yes,III,Wild Type,583,Group 3
+BGI-RS03,Adenocarcinoma,50,BGI,NA,0.6969,Male,NA,293,67,0:LIVING,0.17,Yes,III,KRAS,579,Group 3
+A193,Adenocarcinoma,54,GSK,NA,0.379,Male,Poorly differentiated,221,21.8,1:DECEASED,0.17,Yes,I,Wild Type,521,Group 3
+A229,Adenocarcinoma,75,GSK,NA,0.6472,Male,NA,184,0.833333333,1:DECEASED,0.78,Yes,IV,Wild Type,490,Group 3
+BGI-EX06,Adenocarcinoma,82,BGI,NA,0.1373,Male,NA,228,17,0:LIVING,0.58,Yes,I,Wild Type,490,Group 3
+A218,Adenocarcinoma,67,GSK,NA,0.0414,Male,Poorly differentiated,190,75.73333333,0:LIVING,0.2,Yes,III,Wild Type,446,Group 3
+BGI-RS26,Adenocarcinoma,68,BGI,NA,0.285,Male,NA,215,59,0:LIVING,0.18,Yes,III,KRAS,442,Group 3
+A267,Adenocarcinoma,72,GSK,NA,0.2457,Female,NA,190,70.03333333,0:LIVING,0.12,Yes,I,KRAS,432,Group 3
+BGI-RS06,Adenocarcinoma,56,BGI,NA,0.4537,Male,NA,224,59,0:LIVING,0.16,Yes,III,KRAS,409,Group 3
+BGI-RS05,Adenocarcinoma,71,BGI,NA,0.1669,Male,NA,199,26,1:DECEASED,0.16,Yes,III,Wild Type,406,Group 3
+A247,Adenocarcinoma,69,GSK,NA,0.0916,Male,Poorly differentiated,185,26.16666667,0:LIVING,0.14,Yes,I,KRAS,405,Group 3
+BGI-EX07,Adenocarcinoma,51,BGI,NA,0.1375,Male,NA,191,17,0:LIVING,0.16,Yes,II,KRAS,384,Group 3
+BGI-WG15,Adenocarcinoma,56,BGI,NA,0.568,Female,NA,116,7,0:LIVING,0.18,Yes,III,KRAS,369,Group 3
+BGI-RS33,Adenocarcinoma,67,BGI,NA,0.6959,Male,NA,166,6,1:DECEASED,0.28,Yes,I,Wild Type,345,Group 3
+A201,Adenocarcinoma,67,GSK,NA,0.231,Female,Moderately differentiated,140,122.9,0:LIVING,0.37,Yes,II,Wild Type,342,Group 3
+A433,Adenocarcinoma,64,GSK,NA,0.3974,Female,Poorly differentiated,131,27.76666667,0:LIVING,0.24,Yes,II,Wild Type,328,Group 3
+BGI-RS36,Adenocarcinoma,63,BGI,NA,0.4854,Male,NA,145,61,0:LIVING,0.18,Yes,II,Wild Type,322,Group 3
+A126,Adenocarcinoma,68,GSK,NA,0.2279,Male,Moderately differentiated,116,27.6,1:DECEASED,0.16,Yes,II,BRAF,296,Group 3
+BGI-RS49,Adenocarcinoma,51,BGI,NA,0.1834,Male,NA,136,61,0:LIVING,0.18,Yes,II,Wild Type,275,Group 3
+BGI-WG02,Adenocarcinoma,78,BGI,NA,0.0907,Male,NA,97,6,1:DECEASED,0.14,Yes,III,Wild Type,270,Group 3
+A227,Adenocarcinoma,75,GSK,NA,0.0665,Male,NA,106,6.366666667,1:DECEASED,0.26,Yes,III,KRAS,259,Group 3
+A250,Adenocarcinoma,55,GSK,NA,0.409,Male,Moderately differentiated,106,33.4,0:LIVING,0.17,Yes,I,KRAS,258,Group 3
+A232,Adenocarcinoma,76,GSK,NA,0.0769,Male,Moderately differentiated,77,30.8,1:DECEASED,0.81,Yes,III,Wild Type,212,Group 3
+A537,Adenocarcinoma,79,GSK,NA,0.2832,Male,Poorly differentiated,84,18.1,1:DECEASED,0.42,Yes,III,Wild Type,209,Group 3
+A200,Adenocarcinoma,49,GSK,NA,0.4616,Male,Moderately differentiated,71,100.5666667,0:LIVING,0.63,Yes,III,Wild Type,204,Group 3
+BGI-EX01,Adenocarcinoma,59,BGI,NA,0.5406,Male,NA,81,20,0:LIVING,0.24,Yes,III,Wild Type,191,Group 3
+A198,Adenocarcinoma,67,GSK,NA,0.1436,Male,NA,70,14.86666667,1:DECEASED,0.47,Yes,III,KRAS,184,Group 3
+A158,Adenocarcinoma,63,GSK,NA,0.1689,Male,Moderately differentiated,68,38.93333333,0:LIVING,0.49,Yes,II,KRAS,166,Group 3
+A167,Adenocarcinoma,74,GSK,NA,0.0207,Male,Moderately differentiated,66,35.36666667,0:LIVING,0.24,Yes,I,Wild Type,158,Group 3
+A258,Adenocarcinoma,65,GSK,NA,0.338,Male,Moderately differentiated,64,24.53333333,1:DECEASED,0.2,Yes,II,Wild Type,150,Group 3
+A240,Adenocarcinoma,50,GSK,NA,6.00E-04,Male,Poorly differentiated,66,31.5,0:LIVING,0.29,Yes,I,Wild Type,149,Group 3
+BGI-RS31,Adenocarcinoma,63,BGI,NA,0.0928,Male,NA,74,28,1:DECEASED,0.22,Yes,I,KRAS,147,Group 3
+A263,Adenocarcinoma,64,GSK,NA,0.1309,Male,Moderately differentiated,51,89.8,0:LIVING,0.72,Yes,I,BRAF,145,Group 3
+A530,Adenocarcinoma,72,GSK,NA,0.0253,Female,NA,46,20.3,0:LIVING,0.24,Yes,I,KRAS,119,Group 3
+A196,Adenocarcinoma,82,GSK,NA,3.00E-04,Male,Well to Moderately differentiated,42,9.966666667,1:DECEASED,0.29,Yes,II,Wild Type,111,Group 3
+A159,Adenocarcinoma,49,GSK,NA,0.1566,Male,Moderately differentiated,48,37.3,0:LIVING,0.3,Yes,I,Wild Type,107,Group 3
+A025,Adenocarcinoma,76,GSK,NA,0.055,Male,NA,33,53.1,1:DECEASED,0.38,Yes,II,KRAS,105,Group 3
+BGI-EX05,Adenocarcinoma,68,BGI,NA,0.1371,Male,NA,43,4,1:DECEASED,0.13,Yes,III,Wild Type,104,Group 3
+A513,Adenocarcinoma,65,GSK,NA,0.0036,Male,NA,32,7.6,1:DECEASED,0.24,Yes,IV,BRAF,102,Group 3
+A155,Adenocarcinoma,66,GSK,NA,0.1369,Male,Moderately differentiated,45,37.66666667,0:LIVING,0.38,Yes,II,KRAS,95,Group 3
+BGI-EX08,Adenocarcinoma,47,BGI,NA,0.472,Male,NA,46,16,0:LIVING,0.23,Yes,IV,Wild Type,90,Group 3
+A379,Adenocarcinoma,62,GSK,NA,0.294,Male,Moderately differentiated,25,28.23333333,0:LIVING,0.21,Yes,III,Wild Type,71,Group 3
+BGI-RS19,Adenocarcinoma,53,BGI,NA,0.4514,Male,NA,26,67,0:LIVING,0.15,Yes,I,Wild Type,56,Group 3
+BGI-WG09,Adenocarcinoma,66,BGI,NA,0.0151,Male,NA,17,16,0:LIVING,0.14,Yes,III,Wild Type,51,Group 3
+BGI-RS51,Adenocarcinoma,49,BGI,NA,0.0395,Male,NA,19,35,0:LIVING,0.39,Yes,III,Wild Type,48,Group 3
+A195,Adenocarcinoma,62,GSK,NA,3.00E-04,Male,NA,17,23,1:DECEASED,0.29,Yes,II,Wild Type,46,Group 3
+A280,Adenocarcinoma,49,GSK,NA,0.0984,Male,NA,13,74.86666667,0:LIVING,0.5,Yes,I,Wild Type,42,Group 3
+A234,Adenocarcinoma,77,GSK,NA,0.0083,Male,Moderately differentiated,15,36.26666667,0:LIVING,0.29,Yes,I,Wild Type,40,Group 3
+BGI-RS42,Adenocarcinoma,46,BGI,NA,0.1538,Male,NA,22,63,0:LIVING,0.2,Yes,I,Wild Type,35,Group 3
+A124,Adenocarcinoma,68,GSK,NA,0.0012,Male,Moderately differentiated,9,46.46666667,0:LIVING,0.29,Yes,I,Wild Type,32,Group 3
+BGI-RS04,Adenocarcinoma,54,BGI,NA,0.2609,Male,NA,16,50,1:DECEASED,0.25,Yes,III,Wild Type,31,Group 3
+A211,Adenocarcinoma,50,GSK,NA,9.00E-04,Female,Moderately differentiated,14,108,0:LIVING,0.23,Yes,I,Wild Type,30,Group 3
+A522,Adenocarcinoma,63,GSK,NA,2.00E-04,Male,NA,12,21.3,0:LIVING,0.26,Yes,I,Wild Type,24,Group 3
+A264,Adenocarcinoma,58,GSK,NA,0.0031,Male,Poorly differentiated,6,68.93333333,0:LIVING,0.26,Yes,II,Wild Type,17,Group 3
+A508,Adenocarcinoma,71,GSK,NA,1.00E-04,Male,Poorly differentiated,7,22.96666667,1:DECEASED,0.3,Yes,III,Wild Type,17,Group 3
+A344,Adenocarcinoma,60,GSK,NA,7.00E-04,Male,NA,3,5.233333333,1:DECEASED,0.3,Yes,IV,Wild Type,13,Group 3
+A214,Adenocarcinoma,58,GSK,NA,0.0061,Male,Poorly differentiated,4,101.9,0:LIVING,0.33,Yes,I,Wild Type,8,Group 3

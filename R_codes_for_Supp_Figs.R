@@ -1,10 +1,9 @@
-rm(list = ls()) 
 library(tidyverse)
 library(ggpubr)
 
 load("ITH2_data.Rdata")
 
-###  Supp Figure S1  ###
+###  Supp Fig S1  ###
 ITH2.cov <- read.csv("Table.S4.csv")
 ITH2.clinical <- read.csv("Table.S2.csv")
 ITH2.cov <- left_join(ITH2.cov, ITH2.clinical, by = "Patient_ID")
@@ -67,7 +66,7 @@ mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'b
 
 
 
-### Supp Figure S2 ###
+### Supp Fig S2 ###
 GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
   subset(Chromosome %in% c(1:22, "X","Y") & Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
            Variant_Classification %in% 
@@ -198,13 +197,108 @@ p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) +
 ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")
 
 
+###  Supp Fig S4 ###
+rm(list = ls()) 
+load("ITH2_data.Rdata")
+ITH2.table <- read.csv("Table.S4.csv")
+ITH2.clinical <- subset(ITH2.clinical, Group != "NSRO-neg non-smoking")
+ITH2.clinical$Group <- factor(ITH2.clinical$Group, 
+  levels = c("NSRO-driven non-smoking", "NSRO-driven smoking", "Typical-smoking"))
 
+ITH2.hatchet <- read.csv("data-SCNA-segment-HATCHet.csv") %>% 
+ subset(ID %in% ITH2.clinical$Patient_ID)
 
-###  Supp Figure S5  ###
-ITH2.hatchet <- readcsv("data-SCNA-segment-HATCHet.csv")
+ITH2.SCNA <- lapply(unique(ITH2.clinical$Patient_ID), function(x){
+  #browser()
+  seg.ID <- subset(ITH2.hatchet, ID == x)
+  ctm <- read.delim("data-GRCh38p7-region.tsv")
+  cat(paste("Analyzing CNV segments of", x, "\n"))
+  
+  seg.nc <- lapply(paste0("chr",1:22), function(x){
+    seg.chr <- subset(seg.ID, CHR == x)
+    df1 <- subset(seg.chr, END <= ctm$centromere_start[ctm$chr==x])
+    df2 <- subset(seg.chr, START > ctm$centromere_end[ctm$chr==x])
+    
+    df3 <- subset(seg.chr, START <= ctm$centromere_start[ctm$chr==x] & 
+                    END > ctm$centromere_start[ctm$chr==x] & 
+                    END <= ctm$centromere_end[ctm$chr==x])
+    if(nrow(df3)>0){
+      df3$END <- ctm$centromere_start[ctm$chr==x]
+    }
+    
+    df4 <- subset(seg.chr, END > ctm$centromere_end[ctm$chr==x] & 
+                    START > ctm$centromere_start[ctm$chr==x] & 
+                    START <= ctm$centromere_end[ctm$chr==x])
+    if(nrow(df4)>0){
+      df4$START <- ctm$centromere_end[ctm$chr==x]
+    }
+    
+    df5 <- subset(seg.chr, START <= ctm$centromere_start[ctm$chr==x] & 
+                    END > ctm$centromere_end[ctm$chr==x])
+    if(nrow(df5)>0){
+      df5 <- df5[c(1,1),]
+      df5$END[1] <- ctm$centromere_start[ctm$chr==x]
+      df5$START[2] <- ctm$centromere_end[ctm$chr==x]
+    }
+    
+    df <- rbind(df1,df2,df3,df4,df5) %>% arrange(START)
+    return(df)
+  })
+  seg.nc <- do.call("rbind", seg.nc)
+  
+  ITH2 <- subset(ITH2.table, Patient_ID == x & Tissue_type == "Lung tumor")
+  
+  seg.nc1 <- subset(seg.nc, abs(CNt - BG.ploidy) >= 1)
+  seg.nc2 <- subset(seg.nc, abs(CNt - BG.ploidy) >= 2)
+  seg.loh <- subset(seg.nc, CNa>0 & CNb==0)
+  ploidy <- unique(ITH2$Tumor_ploidy[!is.na(ITH2$Tumor_ploidy)])
+  
+  df <- data.frame(ID = x, ploidy = ploidy, BG.ploidy = unique(seg.ID$BG.ploidy), 
+                   GII = sum(seg.nc1$END-seg.nc1$START)/sum(seg.ID$END-seg.ID$START), 
+                   adGII = sum(seg.nc2$END-seg.nc2$START)/sum(seg.ID$END-seg.ID$START),
+                   LOH = sum(seg.loh$END-seg.loh$START)/sum(seg.ID$END-seg.ID$START))
+  return(df)
+})
+ITH2.SCNA <- do.call("rbind", ITH2.SCNA)
+ITH2.SCNA <- left_join(ITH2.SCNA, ITH2.clinical[,c("Patient_ID","Group")], by = c("ID"="Patient_ID"))
+
+compare.group <- list(c("NSRO-driven non-smoking","NSRO-driven smoking"), 
+                      c("NSRO-driven smoking","Typical-smoking"), 
+                      c("NSRO-driven non-smoking","Typical-smoking"))
+p <- lapply(c("ploidy","GII","adGII","LOH"), function(x){
+  ymax <- ifelse(x=="ploidy",5,1)
+  p <- ggviolin(ITH2.SCNA, x = "Group", y = x, fill = "Group", 
+                palette = c("#66CCEE","#EE6677","#228833"), add = "boxplot", xlab = FALSE, 
+                add.params = list(fill = "white"), width=0.8) + rremove("legend") + 
+    theme(axis.text.x = element_blank()) + 
+    scale_y_continuous(limits = c(0,ymax)) + 
+    stat_compare_means(comparisons = compare.group, label = "p.signif", 
+                       hide.ns = T, show.legend = F)
+  return(p)
+})
+
+ITH2.SCNA$WGD <- ifelse(ITH2.SCNA$BG.ploidy==4, "GD", "nGD")
+WGD.rate <- count(ITH2.SCNA, Group, WGD)
+WGD.rate$WGD <- factor(WGD.rate$WGD, levels = c("nGD", "GD"))
+WGD.rate$WGD.pct <- round(WGD.rate$n/c(23,23,12,12,11,11), digits = 2)
+p[[5]] <- ggbarplot(WGD.rate, x = "Group", y = "WGD.pct", fill = "WGD", xlab = FALSE, 
+          palette = c("gray80","royalblue"), 
+          label = FALSE, lab.col = "white", lab.pos = "in", lab.size = 4)
+
+do.call("ggarrange", c(p,nrow=2,ncol=3))
+
+###  Supp Fig S5  ###
+rm(list = ls()) 
+load("ITH2_data.Rdata")
+ITH2.table <- read.csv("Table.S4.csv")
+ITH2.clinical <- subset(ITH2.clinical, Group != "NSRO-neg non-smoking")
+ITH2.clinical$Group <- factor(
+  ITH2.clinical$Group, 
+  levels = c("NSRO-driven non-smoking", "NSRO-driven smoking", "Typical-smoking"))
+ITH2.hatchet <- read.csv("data-SCNA-segment-HATCHet.csv") %>% 
+  subset(ID %in% ITH2.clinical$Patient_ID)
 ctm <- read.delim("data-GRCh38p7-region.tsv")
 
-### binning the genome at size of 5MB and calculate mean CN
 CNV.summary <- function(x, res.mb = 5){
   res <- res.mb*1000000
   cat(paste("Analyzing CNV segments of", x, "\n"))
@@ -300,6 +394,7 @@ ITH2.seg <- do.call("rbind", ITH2.seg)
 ITH2.seg <- mutate(ITH2.seg, CNV = CNt.sum - BG.ploidy, 
                    START = as.integer(START), END = as.integer(END)) %>% 
   mutate(SEG = str_glue("{CHR}:{START}-{END}")) %>% 
+  left_join(ITH2.clinical[,c("Patient_ID","Group")], by = c("ID"="Patient_ID")) %>% 
   dplyr::select(ID, CHR, START, END, SEG, starts_with("CN"), BG.ploidy, Group)
 ITH2.seg$CNa.sum[is.nan(ITH2.seg$CNa.sum)] <- NA
 ITH2.seg$CNb.sum[is.nan(ITH2.seg$CNb.sum)] <- NA
@@ -395,16 +490,36 @@ p3 <- ggplot(CNV.loss) +
 ggpubr::ggarrange(p1,p2,p3,heights = c(8,1,10), ncol=1, align="v")
 
 
-## comparison of TMB/ITH between male vs. female NSRO-driven tumors in GIS cohort
-GIS.clinical <- read.csv("ITH2/GIS cohort/GIS031_clinical_valid.csv") %>% 
-  subset(driver.group %in% c("Group 1", "Group 2"))
+### Supp Fig S6  ###
+ITH2.clinical <- subset(ITH2.clinical, Group %in% c("NSRO-driven non-smoking", "NSRO-driven smoking"))
+compare.group <- list(c("Male","Female"))
+p <- lapply(c("Tumor_mut_burden","Truncal_mut","Num_driver_mut","ITH"), function(x){
+  y.max <- case_when(
+    x %in% c("Tumor_mut_burden", "Truncal_mut") ~ 150,
+    x == "Num_driver_mut" ~ 20,
+    x == "ITH" ~ 1
+  )
+  
+  p <- ggpubr::ggviolin(
+    ITH2.clinical, x = "Gender", y = x, fill = "Gender",
+    palette =  c("orchid1","turquoise4"), width = 0.8, 
+    add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + 
+    rremove("legend") + 
+    scale_y_continuous(limits = c(0,y.max)) + 
+    stat_compare_means(comparisons = compare.group, label = "p.format", hide.ns = F, show.legend = F)+
+  theme(axis.title.y = element_blank(), axis.text.x = element_blank()) 
+  return(p)
+})
+do.call("ggarrange", c(p,ncol = 4))
 
-GIS.maf <- read.table("ITH2/GIS cohort/GIS_snv_indel.maf", sep = "\t", header = T) %>% 
+GIS.clinical <- read.csv("data-GIS_clinical.csv") %>% 
+  subset(driver.group %in% c("Group 1", "Group 2"))
+GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
   subset(Chromosome %in% c(1:22, "X","Y") & Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
            Variant_Classification %in% 
            c("Missense_Mutation","Nonsense_Mutation","Splice_Site","In_Frame_Del",
              "In_Frame_Ins","Frame_Shift_Del", "Frame_Shift_Ins"))
-driver.list <- readRDS("ITH2/Driver_gene_list/driver.list.COSMIC.ext.rds")
+driver.list <- readRDS("data-driver.list.COSMIC.ext.rds")
 GIS.maf$driver <- ifelse(GIS.maf$Hugo_Symbol %in% driver.list, "Driver", "Non-driver")
 tmp <- subset(GIS.maf, driver == "Driver") %>% count(Tumor_Sample_Barcode)
 colnames(tmp)[2] <- "Driver.n"
@@ -428,5 +543,354 @@ p <- lapply(c("Mutation.Count","Driver.n"), function(x){
   return(p)
 })
 do.call("ggarrange", c(p,ncol = 2))
-table(GIS.clinical$Gender)
 
+
+### Supp Fig S9  ###
+rm(list = ls())
+load("ITH2_data.Rdata")
+ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
+rownames(ITH2.sparse)[11] <- "Total.mut"
+ITH2.sparse <- t(ITH2.sparse) %>% data.frame()
+ITH2.sparse$APOBEC <- ITH2.sparse$SBS2 + ITH2.sparse$SBS13
+ITH2.sparse$Sector_WES_ID <- rownames(ITH2.sparse)
+ITH2.sparse <- left_join(
+  ITH2.sparse, dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group), by = "Sector_WES_ID") %>% 
+  left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr, Oncogene_mut), by = "Patient_ID")
+
+ITH2.sparse <- subset(ITH2.sparse, Group != "NSRO-neg non-smoking")
+ITH2.sparse$Group <- factor(ITH2.sparse$Group, 
+                            levels = c("NSRO-driven non-smoking", "NSRO-driven smoking", "Typical-smoking"))
+plot.SBS.act <- function(sig){
+  SBS.n <- table(ITH2.sparse$Group, ITH2.sparse[,sig]>0) %>% as.matrix()
+  SBS.act <- ITH2.sparse[ITH2.sparse[,sig]>0,]
+  SBS.act <- SBS.act[,c("Group","Total.mut",sig)]
+  colnames(SBS.act)[3] <- "SBS"
+
+  ggplot(SBS.act, aes(x=log10(Total.mut), y=SBS)) + theme_bw() +
+    geom_point(aes(color = Group), size = 3, show.legend = F) + 
+    facet_grid(. ~ Group) + xlim(1,4) + theme(axis.title.x = element_blank()) + 
+    scale_color_manual(values = c("NSRO-driven non-smoking"="#66CCEE",
+                                  "NSRO-driven smoking"="#EE6677",
+                                  "Typical-smoking"="#228833"))
+}
+plot.SBS.act("APOBEC")
+plot.SBS.act("SBS18")
+
+
+### Supp Fig S12  ###
+rm(list = ls())
+load("ITH2_data.Rdata")
+ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
+rownames(ITH2.sparse)[11] <- "Total.mut"
+ITH2.sparse <- t(ITH2.sparse) %>% data.frame()
+ITH2.sparse$Sector_WES_ID <- rownames(ITH2.sparse)
+ITH2.sparse <- left_join(
+  ITH2.sparse, dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group), by = "Sector_WES_ID") %>% 
+  left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr, Oncogene_mut), by = "Patient_ID") %>% 
+  mutate(Group = factor(Group, levels = c("NSRO-driven non-smoking", "NSRO-neg non-smoking",
+                                          "NSRO-driven smoking", "Typical-smoking")))
+tmp <- group_by(ITH2.sparse, Patient_ID) %>% summarize(sbs.mean = mean(Total.mut))
+ITH2.sparse <- left_join(ITH2.sparse, tmp, by = "Patient_ID") %>% 
+  arrange(Group, desc(sbs.mean), Patient_ID, desc(Total.mut))
+
+ITH2.split <- read.csv("data-ITH2_split_exposure.csv")
+ITH2.trunk.SBS <- ITH2.split[,grep("truncal",colnames(ITH2.split))]
+rownames(ITH2.trunk.SBS) <- ITH2.split[,1]
+colnames(ITH2.trunk.SBS) <- sub(".truncal","",colnames(ITH2.trunk.SBS))
+ITH2.trunk.SBS <- rbind(ITH2.trunk.SBS, ITH2.trunk.SBS["SBS2",]+ITH2.trunk.SBS["SBS13",])
+rownames(ITH2.trunk.SBS)[11] <- "APOBEC"
+
+ITH2.branch.SBS <- ITH2.split[,grep("branch",colnames(ITH2.split))]
+rownames(ITH2.branch.SBS) <- ITH2.split[,1]
+colnames(ITH2.branch.SBS) <- sub(".branch","",colnames(ITH2.branch.SBS))
+ITH2.branch.SBS <- rbind(ITH2.branch.SBS, ITH2.branch.SBS["SBS2",]+ITH2.branch.SBS["SBS13",])
+rownames(ITH2.branch.SBS)[11] <- "APOBEC"
+
+color.mutsig <- c(scales::brewer_pal(palette = "Paired")(8),"grey10")
+names(color.mutsig) <- c("SBS5","SBS1","SBS40","SBS18","SBS9","APOBEC","SBS17a","SBS28","SBS4")
+
+color.driver <- c("EGFR"="orchid3","KRAS"="lightskyblue","BRAF"="steelblue4",
+                  "MET"="yellowgreen","ERBB2"="tan1","ALK"="brown","Wild type"="gray90")
+
+color.smoking <- function(x){
+  case_when(x == 0 ~ "grey95",
+            x > 0   & x < 20 ~ "grey75",
+            x >= 20 & x < 40 ~ "grey55",
+            x >= 40 & x < 60 ~ "grey35",
+            x >= 60 & x < 80 ~ "grey15",
+            x >= 80 ~ "grey5")
+}
+
+space.brp <- sapply(unique(ITH2.sparse$Group), function(x){
+  tmp <- subset(ITH2.sparse, Group == x)$Patient %>% table()
+  tmp <- tmp[unique(subset(ITH2.sparse, Group == x)$Patient)]
+  brp <- sapply(tmp, function(x){c(0.5,rep(0,(x-1)))}, simplify = T) %>% unlist()
+  brp[1] <- 4
+  return(brp)
+}) %>% unlist()
+
+layout(matrix(c(rep(1:2,each=5),3,4,5,5), ncol = 1))
+par(mar = c(0.2, 0.2, 0.1, 0.2), oma = c(1, 9, 1, 1))
+
+barplot(as.matrix(ITH2.branch.SBS[names(color.mutsig),ITH2.sparse$Sector_WES_ID]), border = NA,  
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, line = 0, las = 1, at = seq(0,1000,500), labels = seq(0,1000,500))
+mtext("Signature\nactivity\nin Branch\n(counts)", side=2, line = 3, cex = 1, 
+      las = 2, outer = FALSE, col = 'black')
+barplot(as.matrix(-ITH2.trunk.SBS[names(color.mutsig),ITH2.sparse$Sector_WES_ID]), border = NA,  
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig, ylim = c(-1800,0))
+axis(side = 2, line = 0, las = 1, 
+     at = c(0,-500,-1000,-1500,-1800), labels = c(0,500,1000,1500,1800))
+mtext("Signature\nactivity\nin Trunk\n(counts)", side=2, line = 3, cex = 1, 
+      las = 2, outer = FALSE, col = 'black')
+
+barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.smoking(ITH2.sparse$Smoking_pk_yr))
+mtext("Smoking", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.driver[ITH2.sparse$Oncogene_mut])
+mtext("Oncogene mutation", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+tmp <- barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = F, space = space.brp, col = "white")
+text(x = sapply(unique(ITH2.sparse$Patient), function(x){mean(tmp[ITH2.sparse$Patient==x])}), 
+     y = 0.5, label = unique(ITH2.sparse$Patient), cex = 1, srt=90, col = "black", )
+mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+dev.off()
+
+ITH2.branch.SBS.ratio <- apply(ITH2.branch.SBS, MARGIN = 2, FUN = function(x){x/sum(x[1:10])}) %>% 
+  as.matrix()
+ITH2.trunk.SBS.ratio <- apply(ITH2.trunk.SBS, MARGIN = 2, FUN = function(x){x/sum(x[1:10])}) %>% 
+  as.matrix()
+
+layout(matrix(c(rep(1:2,each=5),3,4,5,5,6,6,6), ncol = 1))
+par(mar = c(0.2, 0.2, 0.1, 0.2), oma = c(1, 9, 1, 1))
+barplot(ITH2.branch.SBS.ratio[names(color.mutsig),ITH2.sparse$Sector_WES_ID], border = NA,  
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, line = 0, las = 1, at = seq(0,1,0.5), labels = seq(0,1,0.5))
+mtext("Signature\nactivity\nin Branch\n(ratio)", side=2, line = 3, cex = 1, 
+      las = 2, outer = FALSE, col = 'black')
+
+barplot(-ITH2.trunk.SBS.ratio[names(color.mutsig),ITH2.sparse$Sector_WES_ID], border = NA,  
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, line = 0, las = 1, at = c(-1,-0.5,0), labels = c(0,0.5,1))
+mtext("Signature\nactivity\nin Trunk\n(ratio)", side=2, line = 3, cex = 1, 
+      las = 2, outer = FALSE, col = 'black')
+
+barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.smoking(ITH2.sparse$Smoking_pk_yr))
+mtext("Smoking", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.driver[ITH2.sparse$Oncogene_mut])
+mtext("Oncogene mutation", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+tmp <- barplot(rep(1,nrow(ITH2.sparse)), border = NA, axes = F, space = space.brp, col = "white")
+text(x = sapply(unique(ITH2.sparse$Patient), function(x){mean(tmp[ITH2.sparse$Patient==x])}), 
+     y = 0.5, label = unique(ITH2.sparse$Patient), cex = 1, srt=90, col = "black", )
+mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+barplot(1, border = NA, axes = FALSE, col = "white", axisnames = F)
+legend(x = "top", legend = names(color.mutsig), ncol=5, border = NA, bty = "n", cex = 1,
+       fill = color.mutsig)
+dev.off()
+
+### Supp Fig S13 ###
+rm(list = ls())
+
+load("ITH2_data.Rdata")
+ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
+rownames(ITH2.sparse)[11] <- "Total.mut"
+ITH2.sparse <- t(ITH2.sparse) %>% data.frame()
+ITH2.sparse$Sector_WES_ID <- rownames(ITH2.sparse)
+ITH2.sparse <- left_join(
+  ITH2.sparse, dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group), by = "Sector_WES_ID") %>% 
+  left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr, Oncogene_mut), by = "Patient_ID") %>% 
+  subset(Group != "NSRO-neg non-smoking") %>% 
+  mutate(Group = factor(Group, levels = c("NSRO-driven non-smoking",
+                                          "NSRO-driven smoking", "Typical-smoking")))
+
+ITH2.split <- read.csv("data-ITH2_split_exposure.csv")
+ITH2.trunk.SBS <- ITH2.split[,grep("truncal",colnames(ITH2.split))]
+rownames(ITH2.trunk.SBS) <- ITH2.split[,1]
+colnames(ITH2.trunk.SBS) <- sub(".truncal","",colnames(ITH2.trunk.SBS))
+ITH2.trunk.SBS <- rbind(ITH2.trunk.SBS, ITH2.trunk.SBS["SBS2",]+ITH2.trunk.SBS["SBS13",])
+rownames(ITH2.trunk.SBS)[11] <- "APOBEC"
+
+ITH2.branch.SBS <- ITH2.split[,grep("branch",colnames(ITH2.split))]
+rownames(ITH2.branch.SBS) <- ITH2.split[,1]
+colnames(ITH2.branch.SBS) <- sub(".branch","",colnames(ITH2.branch.SBS))
+ITH2.branch.SBS <- rbind(ITH2.branch.SBS, ITH2.branch.SBS["SBS2",]+ITH2.branch.SBS["SBS13",])
+rownames(ITH2.branch.SBS)[11] <- "APOBEC"
+
+SBS.branch.trunk <- function(x){
+  df <- data.frame(SRA.ID = ITH2.sparse$Sector_WES_ID, Patient_ID = ITH2.sparse$Patient_ID, 
+                   driver.group = ITH2.sparse$Group,
+                   Branch = as.numeric(ITH2.branch.SBS[x,ITH2.sparse$Sector_WES_ID]),
+                   Trunk = as.numeric(ITH2.trunk.SBS[x,ITH2.sparse$Sector_WES_ID]), 
+                   Total.mut = ITH2.sparse$Total.mut) %>% 
+    group_by(Patient_ID) %>% 
+    summarise(Trunk.mean = mean(Trunk), Branch.mean = mean(Branch), Total = mean(Branch+Trunk),
+              driver.group = unique(driver.group), sector.n = n()) %>% 
+    mutate(all.group = "all.group") %>% arrange(driver.group) %>% subset(Total > 0)
+  ymax <- (1.1*max(df[,2:3])) %>% round()
+  
+  p1 <- ggpubr::ggpaired(
+    df, cond1 = "Trunk.mean", cond2 = "Branch.mean", ylim = c(0,ymax), 
+    add = "median", facet.by = "all.group", 
+    line.color = rep(ifelse(df$Branch.mean>df$Trunk.mean,"red","gray50"), each=2),  line.size = 0.4, 
+    point.size = 2, title = paste(x, "activity"), 
+    panel.labs = list(all.group = paste0("All group", ",\n n = ", nrow(df)))) + 
+    ggpubr::stat_compare_means(paired = TRUE, label = "p.format") +
+    theme(legend.position = "none", axis.title = element_blank()) 
+  
+  p2 <- ggpubr::ggpaired(
+    df, cond1 = "Trunk.mean", cond2 = "Branch.mean", ylim = c(0,ymax), 
+    add = "median", color = "driver.group", facet.by = "driver.group", 
+    line.color = rep(ifelse(df$Branch.mean>df$Trunk.mean,"red","gray50"), each=2),  line.size = 0.4, 
+    point.size = 2, title = paste(x, "activity"), 
+    palette = c("NSRO-driven non-smoking"="#66CCEE","NSRO-driven smoking"="#EE6677",
+                "Typical-smoking"="#228833"), 
+    panel.labs = list(
+      driver.group = paste0(
+        c("NSRO-driven in non-smokers", "NSRO-driven in smokers", "Typical-smoking"), ",\n n = ", 
+        table(df$driver.group)))
+  ) + 
+    ggpubr::stat_compare_means(paired = TRUE, label = "p.format") +
+    theme(legend.position = "none", axis.title = element_blank()) 
+  
+  p <- ggarrange(p1,p2,ncol = 2,nrow = 1,widths = c(1,3), align = "h")
+  return(p)
+}
+p <- lapply(c("SBS4","APOBEC","SBS18"), SBS.branch.trunk)
+do.call("ggarrange", c(p, ncol=1, align="v"))
+
+
+### Supp Fig S14 ###
+library(umap)
+rm(list = ls())
+load("ITH2_data.Rdata")
+
+ITH2.RNA.TPM <- ITH2.RNA.TPM[rowSums(ITH2.RNA.TPM)>0,]
+ITH2.RNA$Group <- case_when(
+  ITH2.RNA$Group == "Non-smoking" & ITH2.RNA$Oncogene_mut == "Wild type" ~ "NSRO-neg non-smoking",
+  ITH2.RNA$Group == "Non-smoking" & ITH2.RNA$Oncogene_mut != "Wild type" ~ "NSRO-driven non-smoking",
+  ITH2.RNA$Group == "NSRO-driven smoking" ~ "NSRO-driven smoking",
+  ITH2.RNA$Group == "Typical-smoking" ~ "Typical-smoking")
+ITH2.RNA <- subset(ITH2.RNA, Group != "NSRO-neg non-smoking") 
+ITH2.RNA$TRU.subtype <- ifelse(ITH2.RNA$Sector_RNA_ID %in% cluster.TRU, "TRU", "non-TRU")
+  
+set.seed(2000)
+UMAP <- umap(d = t(ITH2.RNA.TPM[,ITH2.RNA$Sector_RNA_ID]), n_components = 5, random_state = 10) 
+tmp <- data.frame(UMAP$layout)
+tmp$Sector_RNA_ID <- ITH2.RNA$Sector_RNA_ID
+tmp <- left_join(tmp, dplyr::select(ITH2.RNA, Patient_ID, Sector_RNA_ID, Group, TRU.subtype),
+                 by = "Sector_RNA_ID")
+
+p <- lapply(1:4, function(x){
+  tmp <- data.frame(UMAP$layout)[,c(x,x+1)]
+  colnames(tmp) <- c("X","Y")
+  tmp$Sector_RNA_ID <- ITH2.RNA$Sector_RNA_ID
+  tmp <- left_join(tmp, dplyr::select(ITH2.RNA, Sector_RNA_ID, Group, TRU.subtype), by = "Sector_RNA_ID")
+  p <- ggplot(tmp, aes(x=X, y=Y)) + 
+    geom_point(aes(color = Group, shape = TRU.subtype), size = 5, show.legend = F) + 
+    xlab(paste0("UMAP_",x)) + ylab(paste0("UMAP_",x+1)) + theme_bw() + 
+    scale_color_manual(values = c("NSRO-driven non-smoking"="#66CCEE",
+                                  "NSRO-driven smoking"="#EE6677","Typical-smoking"="#228833")) + 
+    scale_shape_manual(values=c(10, 16))
+  return(p)
+})
+do.call("ggarrange", c(p,ncol=2,nrow=2))
+
+
+### Supp Fig S15 ###
+library(limma)
+library(ComplexHeatmap)
+rm(list = ls())
+load("ITH2_data.Rdata")
+
+ITH2.RNA$Smoking_status <- ifelse(ITH2.RNA$Smoking_pk_yr > 0, "Ex.Current smoker", "Never smoker")
+ITH2.RNA$SBS4 <- as.numeric(ITH2.sparse["SBS4",ITH2.RNA$Sector_WES_ID])
+ITH2.RNA$SBS4.activity <- ifelse(ITH2.RNA$SBS4 > median(ITH2.RNA$SBS4[ITH2.RNA$SBS4>0]), 
+                                 "SBS4.high", "SBS4.low")
+
+ITH2.RNA$Group <- factor(ITH2.RNA$Group, 
+                         levels = c("Non-smoking","NSRO-driven smoking","Typical-smoking"))
+
+mod <- model.matrix(~ ITH2.RNA$Smoking_status, levels = c("Ex.Current smoker","Never smoker"))
+colnames(mod)[2] <- c("non.smoker")
+fit <- lmFit(object = ITH2.RNA.gsva, design = mod)
+fit <- eBayes(fit)
+tt <- topTable(fit, coef=2, n=Inf, adjust.method = "fdr")
+tt <- rbind(arrange(subset(tt, adj.P.Val <= 0.05 & logFC > 0), adj.P.Val), 
+            arrange(subset(tt, adj.P.Val <= 0.05 & logFC < 0), adj.P.Val))
+
+DEpwys <- rownames(tt) # differential pathways used for clustering
+
+gsva.pathway <- ITH2.RNA.gsva[DEpwys,ITH2.RNA$Sector_RNA_ID] %>% t() %>% scale() %>% t()
+
+hm <- ComplexHeatmap::Heatmap(as.matrix(gsva.pathway), cluster_columns = T, column_km = 2) 
+
+ITH2.RNA$pathway.group <- "Group I" 
+ITH2.RNA$pathway.group[column_order(hm)[[2]]] <- "Group II" 
+ITH2.RNA$gene.exp.subtype <- ifelse(ITH2.RNA$Sector_RNA_ID %in% cluster.TRU, "TRU", "Non-TRU")
+
+tmp <- dplyr::count(ITH2.RNA, Patient_ID, pathway.group) %>% 
+  tidyr::spread(pathway.group, n, fill=0) %>% 
+  mutate(pathway.group.tumor = ifelse(`Group I`==0 , "Group II", 
+                                      ifelse(`Group II`==0, "Group I", "Mixed"))) %>% 
+  mutate(pathway.group.tumor = factor(pathway.group.tumor, 
+                                      levels = c("Group I","Mixed","Group II"))) %>% 
+  left_join(ITH2.RNA[!duplicated(ITH2.RNA$Patient_ID),c("Group", "Patient_ID")], 
+            by = "Patient_ID") %>% 
+  arrange(Group, desc(pathway.group.tumor), desc(`Group II`), `Group I`)
+
+ITH2.RNA <- mutate(ITH2.RNA, Patient_ID = factor(Patient_ID, levels = tmp$Patient_ID)) %>% 
+  arrange(Patient_ID, pathway.group) %>% 
+  mutate(Patient.mark = rep(rep(c("A","B"),16), table(Patient_ID)))
+
+ITH2.RNA$Smoking_pk_yr <- case_when(
+  ITH2.RNA$Smoking_pk_yr == 0 ~ "0",
+  ITH2.RNA$Smoking_pk_yr > 0   & ITH2.RNA$Smoking_pk_yr < 20 ~ "0-20",
+  ITH2.RNA$Smoking_pk_yr >= 20 & ITH2.RNA$Smoking_pk_yr < 40 ~ "20-40",
+  ITH2.RNA$Smoking_pk_yr >= 40 & ITH2.RNA$Smoking_pk_yr < 60 ~ "40-60",
+  ITH2.RNA$Smoking_pk_yr >= 60 & ITH2.RNA$Smoking_pk_yr < 80 ~ "60-80",
+  ITH2.RNA$Smoking_pk_yr >= 80 ~ "80up")
+
+### plot activities of top 10 up- and down-regulated differential pathways on a heatmap 
+DEpwys.up <- subset(tt, adj.P.Val <= 0.01 & logFC > 0) %>% rownames() 
+DEpwys.down <- subset(tt, adj.P.Val <= 0.01 & logFC < 0) %>% rownames() 
+pathways <- c(DEpwys.up, DEpwys.down)
+
+gsva.pathway <- ITH2.RNA.gsva[pathways, ITH2.RNA$Sector_RNA_ID] %>% t() %>% scale() %>% t()
+
+pathway.q.value <- tt[pathways, "adj.P.Val"] %>% format(digits = 2)
+
+rownames(gsva.pathway) <- paste(str_pad(pathway.q.value, width = 8, side = "right"), 
+                                rownames(gsva.pathway), sep = " ")
+
+Heatmap(as.matrix(gsva.pathway), name = "Z score", 
+        column_split = rep(unique(ITH2.RNA$Group), table(ITH2.RNA$Group)),
+        cluster_columns = F, column_names_gp = gpar(fontsize = 4), 
+        row_split = rep(c("Up-regulated","Down-regulated"), 
+                        c(length(DEpwys.up), length(DEpwys.down))), 
+        cluster_rows = F, row_km = 1, row_names_gp = gpar(fontsize = 6), 
+        top_annotation = HeatmapAnnotation(
+          Group = ITH2.RNA$Group, 
+          Oncogene = ITH2.RNA$Oncogene_mut, 
+          TRU.subtype = ITH2.RNA$gene.exp.subtype,
+          SBS4.activity = ITH2.RNA$SBS4.activity, 
+          Smoking = ITH2.RNA$Smoking_pk_yr,
+          Patient.mark = ITH2.RNA$Patient.mark,
+          col = list(Group = c("Non-smoking"="#66CCEE", 
+                               "NSRO-driven smoking"="#EE6677",
+                               "Typical-smoking"="#228833"),
+                     Oncogene = c("EGFR"="orchid3","KRAS"="lightskyblue","MET"="yellowgreen",
+                                  "ALK"="brown","ERBB2"="tan1","Wild type"="gray90"),
+                     TRU.subtype = c("TRU"="violetred1", "Non-TRU"="steelblue1"),
+                     SBS4.activity = c("SBS4.high"="black", "SBS4.low"="gray90"),
+                     Patient.mark = c("A" = "gray90", "B" = "gray10"),
+                     Smoking = c("0"="grey90", "0-20"="grey75","20-40"="grey55",
+                                 "40-60"="grey35","60-80"="grey15","80up"="grey5")
+          )
+        ))

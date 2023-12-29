@@ -2,14 +2,58 @@
 # Install dependency packages
 rm(list = ls())
 library(dplyr)
-library(tidyr)
-library(magrittr)
-library(stringr)
-load("ITH2_data.Rdata")
+library(tidyverse)
+
+## plot Fig 1A (RR for non-smoking-related oncogenes)
+oncogene <- read.csv("data-NSRO.csv", header = T)
+oncogene$Relative_risk <- sapply(1:nrow(oncogene), function(x){
+  (oncogene[x,3]/oncogene[x,4])/(oncogene[x,5]/oncogene[x,6])
+}) %>% round(digits = 2)
+
+oncogene$CI_lower <- sapply(1:nrow(oncogene), function(x){
+  mm <- matrix(as.numeric(oncogene[x,3:6]), nrow=2, byrow=T)
+  mm[,2] <- mm[,2]-mm[,1]
+  n <- rowSums(mm)
+  pp <- (mm[1,1] / n[1]) / (mm[2,1] / n[2])
+  xx <- 1.96 * sqrt(
+    (mm[1,2]/mm[1,1])/n[1] +
+      (mm[2,2]/mm[2,1])/n[2]
+  )
+  yy <- exp(log(pp) - xx)
+  return(yy)
+}) %>% round(digits = 2)
+
+oncogene$CI_upper <- sapply(1:nrow(oncogene), function(x){
+  mm <- matrix(as.numeric(oncogene[x,3:6]), nrow=2, byrow=T)
+  mm[,2] <- mm[,2]-mm[,1]
+  n <- rowSums(mm)
+  pp <- (mm[1,1] / n[1]) / (mm[2,1] / n[2])
+  xx <- 1.96 * sqrt(
+    (mm[1,2]/mm[1,1])/n[1] +
+      (mm[2,2]/mm[2,1])/n[2]
+  )
+  yy <- exp(log(pp) + xx)
+  return(yy)
+}) %>% round(digits = 2)
+oncogene$mut_rate <- oncogene$Mutation_in_nonsmoking_LUAD*100/oncogene$Num_nonsmoking_LUAD
+oncogene <- arrange(oncogene, desc(Relative_risk)) %>% 
+  mutate(RR_log2 = log2(Relative_risk), CI_lower_log2 = log2(CI_lower), 
+         CI_upper_log2 = log2(CI_upper))
+oncogene$Gene <- factor(oncogene$Gene, levels = rev(oncogene$Gene))
+
+ggplot(data = oncogene) + 
+  geom_segment(aes(x=Gene, xend=Gene, y=CI_lower_log2, yend=CI_upper_log2), 
+               size = 1, color = ifelse(oncogene$Relative_risk>1, "red", "blue")) + 
+  geom_point(mapping = aes(x=Gene, y=RR_log2, size = log2(mut_rate)), pch=16) + theme_bw() + 
+  geom_hline(yintercept = 0, color = "gray", linetype="dashed") + 
+  ylab("Relative risk in non-smoking tumor") + 
+  coord_flip()
 
 # calculate tumor mutational burden per sector (defined by the number of 
 # unique mutations) and intra-tumor heterogeneity per sector (defined by the 
 # proportion of branch to total mutations)
+load("ITH2_data.Rdata")
+
 ITH2.mut.cat <- mutate(ITH2.mut.cat, Gene.mut = str_glue("{Gene}_{Amino_acid_change}"))
 
 tmp <- count(ITH2.mut.cat, Sector_ID, Clonality) %>% 

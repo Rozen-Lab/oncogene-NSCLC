@@ -1,0 +1,8 @@
+Gene,Alteration,Mutation_in_nonsmoking_LUAD,Num_nonsmoking_LUAD,Mutation_in_smoking_LUAD,Num_smoking_LUAD
+EGFR,exon 18-21 activating mutations,792,1106,274,679
+ALK,fusion,135,1935,36,1049
+ERBB2,exon 20 insertion,8,248,3,423
+RET,fusion,45,1803,7,1072
+MET,exon 14 skipping mutations,17,904,6,866
+KRAS,exon 2-3 activating mutations,31,902,95,678
+BRAF,activating mutations,7,867,19,623

@@ -1,5 +1,15 @@
-### R codes for running MutationTimeR using 
+### R codes for running MutationTimeR
+
 rm(list = ls())
+
+need.MutationTimeR <- FALSE # Set this to TRUE to install MutationTimeR
+
+if (need.MutationTimeR) {
+  # No version numbers, but both packages last updated earlier than 2020
+  devtools::install_github("mg14/mg14")
+  devtools::install_github("gerstung-lab/MutationTimeR")
+}
+
 
 # Install dependency packages and load in data
 library(tidyverse)
@@ -15,11 +25,13 @@ ITH2.mut.cat$Driver.gene <- ifelse(ITH2.mut.cat$Gene %in% ext.data.driver.list,
                                    "Driver", "Non-driver")
 
 
-# Main function of mutationtimer, estimating clonality of a somatic mutation based on 
-# the VAF, tumor purity, and A/B copy number of that allele
+# Main function to call MutationTimeR::mutationTime on a sector with identifier
+# ID; This function estimates the clonality of each somatic mutation in the
+# given sector based on in the sector given the tumor purity, the mutation's
+# VAF, and the A/B chromosomal copy number at the site of the mutation.
 
 mut.timing <- function(ID){
-  # prepare input data needed for running MutationTimeR
+  # prepare input data needed for callij mutationTime
   mut.cat <- subset(ITH2.mut.cat, Sector_ID == ID & Chromosome %in% 1:22) %>% 
     mutate(Alt_c = round(Depth_tumor_sample*Variant_allele_fraction, 0)) %>% 
     mutate(Ref_c = Depth_tumor_sample - Alt_c) %>% 

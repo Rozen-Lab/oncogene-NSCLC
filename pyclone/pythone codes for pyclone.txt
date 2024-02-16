@@ -1,0 +1,2 @@
+pyclone-vi fit -i ./input/A021.tsv -o ./input/tmp.h5 -c 40 -d beta-binomial -r 10
+pyclone-vi write-results-file -i ./input/tmp.h5 -o ./A021.pyclone.tsv

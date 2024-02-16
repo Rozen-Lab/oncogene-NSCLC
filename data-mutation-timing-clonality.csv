@@ -1,4 +1,4 @@
-Patient.ID,Sector.ID,Gene.mut,Driver.gene,Truncal.branch,Tumor.purity,Tumor.ploidy,WGD,Tum or_ref_count,Tumor_alt_count,VAF,Clonality,MutCN,MutDeltaCN,MajCN,MinCN,MajDerCN,MinDerCN,pMutCN,pGain,pSingle,pSub,pMutCNTail
+Patient.ID,Sector.ID,Gene.mut,Driver.gene,Truncal.branch,Tumor.purity,Tumor.ploidy,WGD,Tumor_ref_count,Tumor_alt_count,VAF,Clonality,MutCN,MutDeltaCN,MajCN,MinCN,MajDerCN,MinDerCN,pMutCN,pGain,pSingle,pSub,pMutCNTail
 A021,CHL664,EGFR.L858R,Driver,Truncal,0.44,3.11,FALSE,49,72,0.597,clonal [early],6,0,6,2,6,2,1,1,0,1.14E-16,0.748059242
 A021,CHL664,TP53.splicing,Driver,Truncal,0.44,3.11,FALSE,38,33,0.467,clonal [early],2,0,2,0,2,0,0.999966153,0.999966153,3.38E-05,7.63E-14,0.706532302
 A021,CHL664,C1orf127.S517C,Non-driver,Truncal,0.44,3.11,FALSE,46,32,0.406,clonal [early],2,0,2,1,2,1,1,1,0,5.18E-14,0.84843927

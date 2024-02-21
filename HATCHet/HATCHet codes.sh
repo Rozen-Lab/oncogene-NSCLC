@@ -1,4 +1,4 @@
-## Following are the python codes for running HATCHet
+## Following are the shell commands for running HATCHet
 ## Here's an example of codes to run HATCHet on patient sample A021
 
 # Run freebayes on germline sample to generate heterozygous SNPs

@@ -66,7 +66,7 @@ mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'b
 
 
 
-### Supp Fig S2 ###
+### Supp Fig S2 and S19 ###
 GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
   subset(Chromosome %in% c(1:22, "X","Y") & Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
            Variant_Classification %in% 
@@ -545,7 +545,7 @@ p <- lapply(c("Mutation.Count","Driver.n"), function(x){
 do.call("ggarrange", c(p,ncol = 2))
 
 
-### Supp Fig S9  ###
+### Supp Fig S9, [should this be S10?]  ###
 rm(list = ls())
 load("ITH2_data.Rdata")
 ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
@@ -766,7 +766,7 @@ p <- lapply(c("SBS4","APOBEC","SBS18"), SBS.branch.trunk)
 do.call("ggarrange", c(p, ncol=1, align="v"))
 
 
-### Supp Fig S14 ###
+### Supp Fig S16 (was S14) ###
 library(umap)
 rm(list = ls())
 load("ITH2_data.Rdata")
@@ -803,7 +803,7 @@ p <- lapply(1:4, function(x){
 do.call("ggarrange", c(p,ncol=2,nrow=2))
 
 
-### Supp Fig S15 ###
+### Supp Fig S17 (was S15) ###
 library(limma)
 library(ComplexHeatmap)
 rm(list = ls())

@@ -3,7 +3,7 @@ library(ggpubr)
 
 load("ITH2_data.Rdata")
 
-###  Supp Fig S1  ###
+###  Supp Fig S1, Num somatic variants, coverage ###
 ITH2.cov <- read.csv("Table.S4.csv")
 ITH2.clinical <- read.csv("Table.S2.csv")
 ITH2.cov <- left_join(ITH2.cov, ITH2.clinical, by = "Patient_ID")
@@ -66,7 +66,7 @@ mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'b
 
 
 
-### Supp Fig S2 and S19 ###
+### Supp Fig S2, S19 Chen et al, Mutations and driver mutations and pathway analysis ###
 GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
   subset(Chromosome %in% c(1:22, "X","Y") & Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
            Variant_Classification %in% 
@@ -197,7 +197,7 @@ p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) +
 ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")
 
 
-###  Supp Fig S4 ###
+###  Supp Fig S5 CNV ###
 rm(list = ls()) 
 load("ITH2_data.Rdata")
 ITH2.table <- read.csv("Table.S4.csv")
@@ -287,7 +287,7 @@ p[[5]] <- ggbarplot(WGD.rate, x = "Group", y = "WGD.pct", fill = "WGD", xlab = F
 
 do.call("ggarrange", c(p,nrow=2,ncol=3))
 
-###  Supp Fig S5  ###
+###  Supp Fig S6 CNV ###
 rm(list = ls()) 
 load("ITH2_data.Rdata")
 ITH2.table <- read.csv("Table.S4.csv")
@@ -490,7 +490,7 @@ p3 <- ggplot(CNV.loss) +
 ggpubr::ggarrange(p1,p2,p3,heights = c(8,1,10), ncol=1, align="v")
 
 
-### Supp Fig S6  ###
+### Supp Fig S7 male vs female ###
 ITH2.clinical <- subset(ITH2.clinical, Group %in% c("NSRO-driven non-smoking", "NSRO-driven smoking"))
 compare.group <- list(c("Male","Female"))
 p <- lapply(c("Tumor_mut_burden","Truncal_mut","Num_driver_mut","ITH"), function(x){
@@ -545,7 +545,7 @@ p <- lapply(c("Mutation.Count","Driver.n"), function(x){
 do.call("ggarrange", c(p,ncol = 2))
 
 
-### Supp Fig S9, S14, and S21  ###
+### Supp Fig S10 ###
 rm(list = ls())
 load("ITH2_data.Rdata")
 ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
@@ -577,7 +577,7 @@ plot.SBS.act("APOBEC")
 plot.SBS.act("SBS18")
 
 
-### Supp Fig S12  ###
+### Supp Fig S16 sig activity in trunk vs branch maybe duplicated  ###
 rm(list = ls())
 load("ITH2_data.Rdata")
 ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
@@ -695,7 +695,7 @@ legend(x = "top", legend = names(color.mutsig), ncol=5, border = NA, bty = "n", 
        fill = color.mutsig)
 dev.off()
 
-### Supp Fig S15 ###
+### Supp Fig S16 trunck and branch ###
 rm(list = ls())
 
 load("ITH2_data.Rdata")
@@ -766,7 +766,7 @@ p <- lapply(c("SBS4","APOBEC","SBS18"), SBS.branch.trunk)
 do.call("ggarrange", c(p, ncol=1, align="v"))
 
 
-### Supp Fig S16 ###
+### Supp Fig S17 umap  ###
 library(umap)
 rm(list = ls())
 load("ITH2_data.Rdata")
@@ -803,7 +803,7 @@ p <- lapply(1:4, function(x){
 do.call("ggarrange", c(p,ncol=2,nrow=2))
 
 
-### Supp Fig S17 ###
+### Supp Fig S18 full heatmap for main cohort ###
 library(limma)
 library(ComplexHeatmap)
 rm(list = ls())

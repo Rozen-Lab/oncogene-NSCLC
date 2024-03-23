@@ -6,16 +6,21 @@ load("ITH2_data.Rdata")
 ###  Supp Fig S1, Num somatic variants, coverage ###
 ITH2.cov <- read.csv("Table.S4.csv")
 ITH2.clinical <- read.csv("Table.S2.csv")
-ITH2.cov <- left_join(ITH2.cov, ITH2.clinical, by = "Patient_ID")
-ITH2.cov$Group <- case_when(
-  ITH2.cov$Group == "Non-smokers" & ITH2.cov$Mutated.oncogene == "Wild Type" ~ "NSRO-neg non-smoking", 
-  ITH2.cov$Group == "Non-smokers" & ITH2.cov$Mutated.oncogene != "Wild Type" ~ "NSRO-driven non-smoking",
-  ITH2.cov$Group == "NSRO-driven in smokers" ~ "NSRO-driven in smokers",
-  ITH2.cov$Group == "Typical smoking" ~ "Typical smoking")
+ITH2.cov <- left_join(ITH2.cov, ITH2.clinical, by = "Patient_ID") %>% 
+  mutate(Group = case_when(
+    Group == "Non-smokers" & Mutated.oncogene == "Wild Type" ~ "NSRO-neg non-smoking", 
+    Group == "Non-smokers" & Mutated.oncogene != "Wild Type" ~ "NSRO-driven non-smoking",
+    Group == "NSRO-driven in smokers" ~ "NSRO-driven in smokers",
+    Group == "Typical smoking" ~ "Typical smoking")
+  )
+
 ITH2.cov$Group <- factor(ITH2.cov$Group, 
-                           levels = c("NSRO-driven non-smoking", "NSRO-neg non-smoking",
-                                      "NSRO-driven in smokers","Typical smoking"))
-ITH2.cov$Tumor_purity <- ifelse(ITH2.cov$Tumor_purity == "< 0.1", 0, as.numeric(ITH2.cov$Tumor_purity))
+                         levels = c("NSRO-driven non-smoking", "NSRO-neg non-smoking",
+                                    "NSRO-driven in smokers","Typical smoking")
+                         )
+
+ITH2.cov$Tumor_purity <- ifelse(ITH2.cov$Tumor_purity == "< 0.1", 0, 
+                                as.numeric(ITH2.cov$Tumor_purity))
 ITH2.cov$Num_variant_called[is.na(ITH2.cov$Num_variant_called)] <- 0
 tmp <- subset(ITH2.cov, Tissue_type == "Lung tumor") %>% 
   group_by(Patient_ID) %>% summarize(mean.var = mean(Num_variant_called))
@@ -67,28 +72,33 @@ mtext("Patient ID", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'b
 
 
 ### Supp Fig S2, S19 Chen et al, Mutations and driver mutations and pathway analysis ###
-GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
-  subset(Chromosome %in% c(1:22, "X","Y") & Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
-           Variant_Classification %in% 
-           c("Missense_Mutation","Nonsense_Mutation","Splice_Site","In_Frame_Del",
-             "In_Frame_Ins","Frame_Shift_Del", "Frame_Shift_Ins"))
-
 GIS.clinical <- read.csv("data-GIS_clinical.csv")
+GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) 
+GIS.maf.NS <- subset(GIS.maf, Chromosome %in% c(1:22, "X","Y") & 
+                       Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID &
+                       Variant_Classification %in% 
+                       c("Missense_Mutation","Nonsense_Mutation","Splice_Site","In_Frame_Del",
+                         "In_Frame_Ins","Frame_Shift_Del", "Frame_Shift_Ins")
+)
+
 GIS.clinical$driver.type <- sapply(1:nrow(GIS.clinical), function(x){
   if(GIS.clinical$driver.gene[x] %in% c("Wild Type", "ALK")){
     return(GIS.clinical$driver.gene[x])
   } else if(GIS.clinical$driver.gene[x] == "EGFR"){
-    maf <- subset(GIS.maf.NS, Hugo_Symbol == "EGFR" & Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
+    maf <- subset(GIS.maf.NS, Hugo_Symbol == "EGFR" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
                     !HGVSp_Short %in% c("p.L62R","p.D256Y","p.R973L","p.A566S","p.E548Q")) %>% 
       mutate(AAChange = sub("p.","",HGVSp_Short))
     return(paste(maf$AAChange, collapse = ";"))
   } else if(GIS.clinical$driver.gene[x] == "ERBB2"){
-    maf <- subset(GIS.maf.NS, Hugo_Symbol == "ERBB2" & Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
+    maf <- subset(GIS.maf.NS, Hugo_Symbol == "ERBB2" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
                     Variant_Classification == "In_Frame_Ins") %>% 
       mutate(AAChange = sub("p.","",HGVSp_Short))
     return(maf$AAChange)
   } else if(GIS.clinical$driver.gene[x] == "MET"){
-    maf <- subset(GIS.maf, Hugo_Symbol == "MET" & Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] & 
+    maf <- subset(GIS.maf, Hugo_Symbol == "MET" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] & 
                     Variant_Classification %in% c("Splice_Site","Intron"))
     return(maf$HGVSc)
   } else if(GIS.clinical$driver.gene[x] %in% c("KRAS","BRAF","KRAS.BRAF")){
@@ -107,7 +117,6 @@ colnames(tmp)[2] <- "Driver.n"
 GIS.clinical <- left_join(GIS.clinical, tmp, by = c("Patient.ID"="Tumor_Sample_Barcode"))
 GIS.clinical$Driver.n[is.na(GIS.clinical$Driver.n)] <- 0
 
-compare.group <- list(c("Group 1","Group 2"), c("Group 2","Group 3"), c("Group 1","Group 3"))
 p <- lapply(c("Mutation.Count","Driver.n"), function(x){
   y.max <- case_when(
     x == "Mutation.Count" ~ 1500,
@@ -116,10 +125,10 @@ p <- lapply(c("Mutation.Count","Driver.n"), function(x){
   p <- ggviolin(GIS.clinical, x = "driver.group", 
                 y = x, fill = "driver.group", 
                 palette =  c("#66CCEE","#EE6677","#228833"), width=0.8, 
-                add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + rremove("legend") + 
+                add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + 
+    rremove("legend") + 
     theme(axis.title.y = element_blank(), axis.text.x = element_blank()) + 
-    scale_y_continuous(limits = c(0,y.max)) + 
-    stat_compare_means(comparisons = compare.group, label = "p.format", hide.ns = F, show.legend = F)
+    scale_y_continuous(limits = c(0,y.max))
   return(p)
 })
 do.call("ggarrange", c(p,ncol = 2))
@@ -130,7 +139,8 @@ GIS.driver <- subset(GIS.maf, driver == "Driver") %>%
   mutate(CHECK = str_glue("{Tumor_Sample_Barcode}:{Hugo_Symbol}")) %>% 
   subset(!duplicated(CHECK))
 
-gene.OR <- dplyr::count(GIS.driver, Hugo_Symbol, driver.group) %>% 
+gene.OR <- subset(GIS.driver, driver.group != "Group 4") %>% 
+  dplyr::count(Hugo_Symbol, driver.group) %>% 
   spread(driver.group, n, fill = 0)
 colnames(gene.OR)[2:4] <- c("Group.1","Group.2","Group.3")
 Group.n <- table(GIS.clinical$driver.group)
@@ -195,6 +205,55 @@ p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) +
   xlim(-8,8) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,24)
 
 ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")
+
+### Supp Fig S3 ###
+rm(list = ls())
+load("ITH2_data.Rdata")
+
+## read pyclone output
+pyclone.out <- read.csv("pyclone/clonal.mut.pyclone.out.csv")
+ITH2.clinical <- read.csv("Table.S2.csv") %>% 
+  mutate(driver.group = ifelse(Group == "Non-smokers" & Mutated.oncogene == "Wild Type", 
+                               "NSRO-neg in non-smokers", as.character(Group)), 
+         phylo.pattern = ifelse(Patient_ID %in% c("A250","A247","A301","A590","A306"),
+                                "Coconut tree", "Unclassified")
+  )
+
+tmp <- count(ITH2.mut.cat, Sector_ID, Clonality) %>% spread(Clonality, n) %>% 
+  mutate(TMB = Branch+Truncal, ITH = Branch/(Branch+Truncal)) %>% 
+  left_join(y = dplyr::select(ITH2.table, Sector_ID = Sector_WES_ID, Patient_ID), 
+            by = "Sector_ID")
+
+tmp2 <- group_by(tmp, Patient_ID) %>% 
+  summarise(TMB.mean = mean(TMB), ITH.mean = mean(ITH))
+
+ITH2.clinical <- left_join(ITH2.clinical, tmp2, by = "Patient_ID")
+
+trunk.pyclone <- group_by(pyclone.out, patient_id) %>% 
+  summarise(truncal.mut.pyclone = n_distinct(mutation_id_clonal)) %>% data.frame()
+
+ITH2.clinical <- left_join(ITH2.clinical, trunk.pyclone, 
+                           by = c("Patient_ID"="patient_id"))
+
+ITH2.clinical$ITH.pyclone <- 
+  (ITH2.clinical$TMB.mean - ITH2.clinical$truncal.mut.pyclone)/ITH2.clinical$TMB.mean
+
+ITH2.clinical <- subset(ITH2.clinical, driver.group != "NSRO-neg in non-smokers")
+
+p <- lapply(c("truncal.mut.pyclone","ITH.pyclone"), function(x){
+  y.max <- case_when(
+    x == "truncal.mut.pyclone" ~ 1000,
+    x == "ITH.pyclone" ~ 1
+  )
+  p <- ggviolin(ITH2.clinical, x = "Group", y = x, fill = "Group", 
+                palette =  c("#66CCEE","#EE6677","#228833"), width=0.8, 
+                add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + rremove("legend") + 
+    theme(axis.title.y = element_blank(), axis.text.x = element_blank()) + 
+    scale_y_continuous(limits = c(0,y.max)) 
+  
+  return(p)
+})
+do.call("ggarrange", c(p,ncol = 2))
 
 
 ###  Supp Fig S5 CNV ###
@@ -545,6 +604,261 @@ p <- lapply(c("Mutation.Count","Driver.n"), function(x){
 do.call("ggarrange", c(p,ncol = 2))
 
 
+### Supp Fig S8 the male subgroup analysis ###
+rm(list = ls())
+library(dplyr)
+library(ggrepel)
+library(ggpubr)
+load("ITH2_data.Rdata")
+
+# compare TMB, Truncal mut, driver mut and ITH across 3 groups
+ITH2.mut.cat <- mutate(ITH2.mut.cat, Gene.mut = str_glue("{Gene}_{Amino_acid_change}"))
+
+tmp <- count(ITH2.mut.cat, Sector_ID, Clonality) %>% 
+  spread(Clonality,n,fill=0) %>% 
+  mutate(TMB.sector = Branch + Truncal, ITH.sector = Branch / (Branch + Truncal)) %>% 
+  mutate(Branch.prop = Branch / TMB.sector, Truncal.prop = Truncal / TMB.sector) %>% 
+  left_join(y = ITH2.table[,c("Patient_ID","Sector_WES_ID")], by = c("Sector_ID"="Sector_WES_ID"))
+
+tmp2 <- group_by(tmp, Patient_ID) %>% 
+  summarize(TMB.tumor = mean(TMB.sector), ITH.tumor = mean(ITH.sector)) %>% data.frame()
+
+rownames(tmp2) <- tmp2$Patient_ID
+
+ITH2.clinical$Tumor_mut_burden <- tmp2[ITH2.clinical$Patient_ID, "TMB.tumor"]
+ITH2.clinical$ITH <- tmp2[ITH2.clinical$Patient_ID, "ITH.tumor"]
+
+# will exclude NSRO-neg non-smoking group in the comparison
+# only use male patients in this analysis
+ITH2.clinical <- subset(ITH2.clinical, Group != "NSRO-neg non-smoking" & Gender == "Male")
+
+p <- lapply(c("Tumor_mut_burden","Truncal_mut","Num_driver_mut","ITH"), function(x){
+  y.max <- case_when(
+    x %in% c("Tumor_mut_burden", "Truncal_mut") ~ 800,
+    x == "Num_driver_mut" ~ 60,
+    x == "ITH" ~ 1
+  )
+  
+  p <- ggpubr::ggviolin(
+    ITH2.clinical, x = "Group", y = x, fill = "Group",
+    palette =  c("#66CCEE","#EE6677","#228833"), width = 0.8, 
+    add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + 
+    rremove("legend") + 
+    scale_y_continuous(limits = c(0,y.max)) + 
+    theme(axis.title.y = element_blank(), axis.text.x = element_blank()) 
+  return(p)
+})
+do.call("ggarrange", c(p,ncol = 4))
+
+# calculate odds ratio of driver mutation and p value using Fisher's test
+# will not include NSRO-neg non-smoking group in the comparison
+ITH2.table <- subset(ITH2.table, Group != "NSRO-neg non-smoking" & 
+                       Patient_ID %in% ITH2.clinical$Patient_ID)
+
+mut.catalog <- subset(ITH2.mut.cat, Patient_ID %in% ITH2.table$Patient_ID) %>% 
+  left_join(dplyr::select(ITH2.table, Sector_WES_ID, Group), 
+            by = c("Sector_ID" = "Sector_WES_ID")) %>% 
+  mutate(CHECK = str_glue("{Patient_ID}:{Gene}")) %>% 
+  subset(Driver_gene == "Driver" & !duplicated(CHECK)) 
+
+gene.OR <- dplyr::count(mut.catalog, Gene, Group) %>% spread(Group, n, fill = 0)
+colnames(gene.OR)[2:4] <- c("Group.1","Group.2","Group.3")
+Group.n <- table(ITH2.clinical$Group)
+gene.OR <- mutate(gene.OR, Group.1.wt = Group.n[1]-Group.1, 
+                  Group.2.wt = Group.n[2]-Group.2, Group.3.wt = Group.n[3]-Group.3)
+gene.OR$prev <- rowSums(gene.OR[2:4])*100/sum(Group.n)
+
+tmp <- lapply(1:nrow(gene.OR), function(x){
+  tab.OR <- data.frame(MT = as.numeric(gene.OR[x,2:4]), 
+                       MT.1 = as.numeric(gene.OR[x,2:4])+1,
+                       WT = as.numeric(gene.OR[x,5:7]))
+  OR.2v1 <- (tab.OR[2,1]/tab.OR[2,3])/(tab.OR[1,1]/tab.OR[1,3])
+  OR.2v1.plus1 <- (tab.OR[2,2]/tab.OR[2,3])/(tab.OR[1,2]/tab.OR[1,3])
+  pvalue.2v1 <- fisher.test(as.matrix(tab.OR[c(1,2),c(1,3)]))$p.value
+  OR.3v1 <- (tab.OR[3,1]/tab.OR[3,3])/(tab.OR[1,1]/tab.OR[1,3])
+  OR.3v1.plus1 <- (tab.OR[3,2]/tab.OR[3,3])/(tab.OR[1,2]/tab.OR[1,3])
+  pvalue.3v1 <- fisher.test(as.matrix(tab.OR[c(1,3),c(1,3)]))$p.value
+  OR.3v2 <- (tab.OR[3,1]/tab.OR[3,3])/(tab.OR[2,1]/tab.OR[2,3])
+  OR.3v2.plus1 <- (tab.OR[3,2]/tab.OR[3,3])/(tab.OR[2,2]/tab.OR[2,3])
+  pvalue.3v2 <- fisher.test(as.matrix(tab.OR[c(2,3),c(1,3)]))$p.value
+  
+  return(data.frame(OR.2v1, OR.2v1.plus1, pvalue.2v1, 
+                    OR.3v1, OR.3v1.plus1, pvalue.3v1, 
+                    OR.3v2, OR.3v2.plus1, pvalue.3v2))
+})
+tmp <- do.call("rbind",tmp)
+gene.OR <- cbind(gene.OR, tmp)
+gene.OR <- mutate(gene.OR, 
+                  OR.2v1.log2 = log2(OR.2v1.plus1), 
+                  adj.p.2v1 = p.adjust(pvalue.2v1, method = "BH"),
+                  OR.3v1.log2 = log2(OR.3v1.plus1), 
+                  adj.p.3v1 = p.adjust(pvalue.3v1, method = "BH"),
+                  OR.3v2.log2 = log2(OR.3v2.plus1), 
+                  adj.p.3v2 = p.adjust(pvalue.3v2, method = "BH")
+)
+
+p1 <- ggplot(gene.OR, aes(x = OR.3v1.log2, y = -log10(pvalue.3v1))) + 
+  geom_point(size = 3, show.legend = FALSE,
+             color = ifelse(gene.OR$pvalue.3v1 < 0.05 & gene.OR$adj.p.3v1 < 0.1, "orangered1", 
+                            ifelse(gene.OR$pvalue.3v1 >= 0.05, "gray60", "steelblue3"))) + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
+                            label = ifelse(gene.OR$pvalue.3v1 < 0.05, gene.OR$Gene,"")) +
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4)
+
+p2 <- ggplot(gene.OR, aes(x = OR.3v2.log2, y = -log10(pvalue.3v2))) + 
+  geom_point(size = 3, show.legend = FALSE,
+             color = ifelse(gene.OR$pvalue.3v2 < 0.05 & gene.OR$adj.p.3v2 < 0.1, "orangered1", 
+                            ifelse(gene.OR$pvalue.3v2 >= 0.05, "gray60", "steelblue3"))) + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
+                            label = ifelse(gene.OR$pvalue.3v2 < 0.05, gene.OR$Gene,"")) +
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4) 
+
+p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) + 
+  geom_point(size = 3, show.legend = FALSE, color = "gray60") + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  xlim(-6,6) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,4)
+
+ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")
+
+### Supp Fig S9 male subgroup of GIS-LUAD cohort ###
+GIS.clinical <- read.csv("data-GIS_clinical.csv") %>% 
+  subset(Gender == "Male")
+GIS.maf <- read.table("data-GIS_snv_indel.maf", sep = "\t", header = T) %>% 
+  subset(Tumor_Sample_Barcode %in% GIS.clinical$Patient.ID)
+GIS.maf.NS <- subset(GIS.maf, Chromosome %in% c(1:22, "X","Y") & 
+                       Variant_Classification %in% 
+                       c("Missense_Mutation","Nonsense_Mutation","Splice_Site","In_Frame_Del",
+                         "In_Frame_Ins","Frame_Shift_Del", "Frame_Shift_Ins")
+)
+
+GIS.clinical$driver.type <- sapply(1:nrow(GIS.clinical), function(x){
+  if(GIS.clinical$driver.gene[x] %in% c("Wild Type", "ALK")){
+    return(GIS.clinical$driver.gene[x])
+  } else if(GIS.clinical$driver.gene[x] == "EGFR"){
+    maf <- subset(GIS.maf.NS, Hugo_Symbol == "EGFR" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
+                    !HGVSp_Short %in% c("p.L62R","p.D256Y","p.R973L","p.A566S","p.E548Q")) %>% 
+      mutate(AAChange = sub("p.","",HGVSp_Short))
+    return(paste(maf$AAChange, collapse = ";"))
+  } else if(GIS.clinical$driver.gene[x] == "ERBB2"){
+    maf <- subset(GIS.maf.NS, Hugo_Symbol == "ERBB2" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] &
+                    Variant_Classification == "In_Frame_Ins") %>% 
+      mutate(AAChange = sub("p.","",HGVSp_Short))
+    return(maf$AAChange)
+  } else if(GIS.clinical$driver.gene[x] == "MET"){
+    maf <- subset(GIS.maf, Hugo_Symbol == "MET" & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x] & 
+                    Variant_Classification %in% c("Splice_Site","Intron"))
+    return(maf$HGVSc)
+  } else if(GIS.clinical$driver.gene[x] %in% c("KRAS","BRAF","KRAS.BRAF")){
+    maf <- subset(GIS.maf.NS, Hugo_Symbol %in% c("KRAS","BRAF") & 
+                    Tumor_Sample_Barcode == GIS.clinical$Patient.ID[x]) %>% 
+      mutate(AAChange = sub("p.","",HGVSp_Short))
+    return(paste(maf$AAChange, collapse = ";"))
+  } 
+})
+
+GIS.clinical <- subset(GIS.clinical, driver.group != "Group 4")
+driver.list <- readRDS("data-driver.list.COSMIC.ext.rds")
+GIS.maf$driver <- ifelse(GIS.maf$Hugo_Symbol %in% driver.list, "Driver", "Non-driver")
+tmp <- subset(GIS.maf, driver == "Driver") %>% count(Tumor_Sample_Barcode)
+colnames(tmp)[2] <- "Driver.n"
+GIS.clinical <- left_join(GIS.clinical, tmp, by = c("Patient.ID"="Tumor_Sample_Barcode"))
+GIS.clinical$Driver.n[is.na(GIS.clinical$Driver.n)] <- 0
+
+p <- lapply(c("Mutation.Count","Driver.n"), function(x){
+  y.max <- case_when(
+    x == "Mutation.Count" ~ 1500,
+    x == "Driver.n" ~ 120
+  )
+  p <- ggviolin(GIS.clinical, x = "driver.group", 
+                y = x, fill = "driver.group", 
+                palette =  c("#66CCEE","#EE6677","#228833"), width=0.8, 
+                add = "boxplot", xlab = FALSE, add.params = list(fill = "white")) + 
+    rremove("legend") + 
+    theme(axis.title.y = element_blank(), axis.text.x = element_blank()) + 
+    scale_y_continuous(limits = c(0,y.max))
+  return(p)
+})
+do.call("ggarrange", c(p,ncol = 2))
+
+GIS.driver <- subset(GIS.maf, driver == "Driver") %>% 
+  left_join(y = dplyr::select(GIS.clinical, Patient.ID, driver.group), 
+            by = c("Tumor_Sample_Barcode" = "Patient.ID")) %>% 
+  mutate(CHECK = str_glue("{Tumor_Sample_Barcode}:{Hugo_Symbol}")) %>% 
+  subset(!duplicated(CHECK))
+
+gene.OR <- subset(GIS.driver, driver.group != "Group 4") %>% 
+  dplyr::count(Hugo_Symbol, driver.group) %>% 
+  spread(driver.group, n, fill = 0)
+colnames(gene.OR)[2:4] <- c("Group.1","Group.2","Group.3")
+Group.n <- table(GIS.clinical$driver.group)
+gene.OR <- mutate(gene.OR, Group.1.wt = Group.n[1]-Group.1, 
+                  Group.2.wt = Group.n[2]-Group.2, Group.3.wt = Group.n[3]-Group.3)
+gene.OR$prev <- rowSums(gene.OR[2:4])*100/sum(Group.n)
+
+tmp <- lapply(1:nrow(gene.OR), function(x){
+  tab.OR <- data.frame(MT = as.numeric(gene.OR[x,2:4]), 
+                       MT.1 = as.numeric(gene.OR[x,2:4])+1,
+                       WT = as.numeric(gene.OR[x,5:7]))
+  OR.2v1 <- (tab.OR[2,1]/tab.OR[2,3])/(tab.OR[1,1]/tab.OR[1,3])
+  OR.2v1.plus1 <- (tab.OR[2,2]/tab.OR[2,3])/(tab.OR[1,2]/tab.OR[1,3])
+  pvalue.2v1 <- fisher.test(as.matrix(tab.OR[c(1,2),c(1,3)]))$p.value
+  OR.3v1 <- (tab.OR[3,1]/tab.OR[3,3])/(tab.OR[1,1]/tab.OR[1,3])
+  OR.3v1.plus1 <- (tab.OR[3,2]/tab.OR[3,3])/(tab.OR[1,2]/tab.OR[1,3])
+  pvalue.3v1 <- fisher.test(as.matrix(tab.OR[c(1,3),c(1,3)]))$p.value
+  OR.3v2 <- (tab.OR[3,1]/tab.OR[3,3])/(tab.OR[2,1]/tab.OR[2,3])
+  OR.3v2.plus1 <- (tab.OR[3,2]/tab.OR[3,3])/(tab.OR[2,2]/tab.OR[2,3])
+  pvalue.3v2 <- fisher.test(as.matrix(tab.OR[c(2,3),c(1,3)]))$p.value
+  
+  return(data.frame(OR.2v1, OR.2v1.plus1, pvalue.2v1, 
+                    OR.3v1, OR.3v1.plus1, pvalue.3v1, 
+                    OR.3v2, OR.3v2.plus1, pvalue.3v2))
+})
+tmp <- do.call("rbind",tmp)
+gene.OR <- cbind(gene.OR, tmp)
+gene.OR <- mutate(gene.OR, 
+                  OR.2v1.log2 = log2(OR.2v1.plus1), 
+                  adj.p.2v1 = p.adjust(pvalue.2v1, method = "BH"),
+                  OR.3v1.log2 = log2(OR.3v1.plus1), 
+                  adj.p.3v1 = p.adjust(pvalue.3v1, method = "BH"),
+                  OR.3v2.log2 = log2(OR.3v2.plus1), 
+                  adj.p.3v2 = p.adjust(pvalue.3v2, method = "BH")
+)
+
+p1 <- ggplot(gene.OR, aes(x = OR.3v1.log2, y = -log10(pvalue.3v1))) + 
+  geom_point(size = 3, show.legend = FALSE,
+             color = ifelse(gene.OR$pvalue.3v1 < 0.05 & gene.OR$adj.p.3v1 < 0.1, "orangered1", 
+                            ifelse(gene.OR$pvalue.3v1 >= 0.05, "gray60", "steelblue3"))) + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
+                            label = ifelse(gene.OR$pvalue.3v1 < 0.05, gene.OR$Hugo_Symbol,"")) +
+  xlim(-8,8) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,24)
+
+p2 <- ggplot(gene.OR, aes(x = OR.3v2.log2, y = -log10(pvalue.3v2))) + 
+  geom_point(size = 3, show.legend = FALSE,
+             color = ifelse(gene.OR$pvalue.3v2 < 0.05 & gene.OR$adj.p.3v2 < 0.1, "orangered1", 
+                            ifelse(gene.OR$pvalue.3v2 >= 0.05, "gray60", "steelblue3"))) + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
+                            label = ifelse(gene.OR$pvalue.3v2 < 0.05, gene.OR$Hugo_Symbol,"")) +
+  xlim(-8,8) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,24) 
+
+p3 <- ggplot(gene.OR, aes(x = OR.2v1.log2, y = -log10(pvalue.2v1))) + 
+  geom_point(size = 3, show.legend = FALSE,
+             color = ifelse(gene.OR$pvalue.2v1 < 0.05 & gene.OR$adj.p.2v1 < 0.1, "orangered1", 
+                            ifelse(gene.OR$pvalue.2v1 >= 0.05, "gray60", "steelblue3"))) + 
+  geom_hline(yintercept = -log10(0.05), color = "black", linetype="dashed") + 
+  ggrepel::geom_label_repel(size = 4, label.padding = 0.1, 
+                            label = ifelse(gene.OR$pvalue.2v1 < 0.05, gene.OR$Hugo_Symbol,"")) +
+  xlim(-8,8) + theme_bw() + theme(axis.title = element_blank()) + ylim(0,24)
+
+ggpubr::ggarrange(p1,p2,p3,ncol=3,align="h")
+
+
 ### Supp Fig S10 ###
 rm(list = ls())
 load("ITH2_data.Rdata")
@@ -577,7 +891,265 @@ plot.SBS.act("APOBEC")
 plot.SBS.act("SBS18")
 
 
-### Supp Fig S16 sig activity in trunk vs branch maybe duplicated  ###
+
+### Supp Fig S11 the TCGA-LUAD cohort
+TCGA.LUAD <- read.csv("data-TCGA-clinical.csv")
+
+TCGA.LUAD$driver.group <- case_when(
+  TCGA.LUAD$driver.group == "Group 1" & TCGA.LUAD$driver.type == "EGFR.ERBB2.MET" ~ "Group 1",
+  TCGA.LUAD$driver.group == "Group 1" & TCGA.LUAD$driver.type != "EGFR.ERBB2.MET" ~ "Group 4",
+  TRUE ~ as.character(TCGA.LUAD$driver.group)
+)
+TCGA.LUAD$driver.group <- factor(TCGA.LUAD$driver.group, levels = paste("Group",c(1,4,2,3)))
+
+TCGA.sparse <- read.csv("data-TCGA_exposure.csv")
+rownames(TCGA.sparse) <- TCGA.sparse[,1]
+TCGA.sparse <- TCGA.sparse[,-1]
+TCGA.LUAD$case_submitter_id <- str_replace_all(TCGA.LUAD$case_submitter_id, "-", ".")
+TCGA.sparse <- rbind(TCGA.sparse, colSums(TCGA.sparse))
+rownames(TCGA.sparse)[nrow(TCGA.sparse)] <- "Total.mut"
+TCGA.sparse <- t(TCGA.sparse)[TCGA.LUAD$case_submitter_id,] %>% data.frame()
+TCGA.sparse$case_submitter_id <- rownames(TCGA.sparse)
+TCGA.sparse$APOBEC <- TCGA.sparse$SBS2 + TCGA.sparse$SBS13
+TCGA.sparse <- left_join(TCGA.sparse, 
+                         dplyr::select(TCGA.LUAD, case_submitter_id, Pack_years = pack_years_smoked, 
+                                       EGFR,MET,ERBB2,KRAS,BRAF,driver.type,driver.group,gender), 
+                         by = "case_submitter_id")
+TCGA.sparse$driver.type <- sapply(1:nrow(TCGA.sparse), function(x){
+  gene <- c("EGFR","MET","ERBB2","KRAS","BRAF")
+  mut <- grep(pattern = "Wild type", x = TCGA.sparse[x,gene], invert = T)
+  if(length(mut>0)){
+    return(paste0(gene[mut], collapse = "."))
+  } else{
+    return("Wild type")
+  }
+})
+
+TCGA.SBS4 <- subset(TCGA.sparse, SBS4>0)
+ggplot(TCGA.SBS4, aes(x=log10(Total.mut), y=SBS4)) + theme_bw() + 
+  geom_point(aes(color = driver.group), size=1.5, show.legend = F) + xlim(1,4) + 
+  scale_color_manual(values = c("Group 1"="#66CCEE","Group 2"="#EE6677",
+                                "Group 3"="#228833","Group 4"="grey50")) + 
+  facet_grid(. ~ driver.group) # Fig S11C
+
+SBS4.prop <- count(TCGA.sparse, driver.group, SBS4==0)
+SBS4.prop$prop <- SBS4.prop$n/rep(table(TCGA.sparse$driver.group), each=2)
+SBS4.prop$label.y <- lapply(unique(SBS4.prop$driver.group), function(x){
+  tmp <- subset(SBS4.prop, driver.group == x)
+  y <- cumsum(tmp$prop) - 0.5*(tmp$prop)
+  return(y)
+}) %>% unlist()  
+
+ggplot(SBS4.prop) + 
+  geom_col(aes(x=driver.group, y=prop), width=0.8,
+           fill = c("#66CCEE","grey90","gray60","gray90","#EE6677","gray90","#228833","gray90")) + 
+  geom_label(aes(x=driver.group, y=label.y, label=n)) + theme_bw() # Fig S11B
+
+## plot TCGA sparse assignment activity
+TCGA.sparse <- arrange(TCGA.sparse, driver.group, desc(Total.mut))
+
+color.mutsig <- c(scales::brewer_pal(palette = "Paired")(11),"grey10")
+names(color.mutsig) <- c("SBS5","SBS1","SBS40","SBS18","SBS9","APOBEC","SBS17a","SBS17b",
+                         "SBS3","SBS28","SBS45","SBS4")
+sparse.ratio <- TCGA.sparse[,names(color.mutsig)]/TCGA.sparse$Total.mut
+space.brp <- sapply(table(TCGA.sparse$driver.group), function(x){
+  return(c(4,rep(0,x-1)))
+}, simplify = T) %>% unlist()
+
+color.driver <- c("EGFR"="orchid3","KRAS"="lightskyblue","BRAF"="steelblue4","KRAS.BRAF"="purple4",
+                  "MET"="yellowgreen","ERBB2"="tan1","Wild type"="gray90")
+
+color.smoking <- function(x){
+  case_when(x == 0 ~ "grey95",
+            x > 0   & x < 20 ~ "grey75",
+            x >= 20 & x < 40 ~ "grey55",
+            x >= 40 & x < 60 ~ "grey35",
+            x >= 60 & x < 80 ~ "grey15",
+            x >= 80 ~ "grey5")
+}
+
+layout(matrix(c(rep(1,14),rep(2,8),3:5,rep(6,4),rep(7,2)), ncol = 1))
+par(mar = c(0.2, 0.2, 0.1, 0.2), oma = c(1, 8, 1, 1))
+
+#1 plot Total mut in SBS 
+barplot(t(TCGA.sparse[,names(color.mutsig)]), border = NA, 
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, at = seq(0,2000,500), line = -1, las = 1, labels = seq(0,2000,500))
+mtext("Signature\nactivity\n(counts)", side=2, line = 2, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#2 plot SBS96 sig reconstruction in ratio
+barplot(t(sparse.ratio[,names(color.mutsig)]), border = NA, ylim = c(0,1.05),
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, at = c(0,0.5,1), line = -1, las = 1, labels = c(0,0.5,1))
+mtext("Signature\nactivity\n(ratio)", side=2, line = 2, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#3 plot smoking bar
+barplot(rep(1,nrow(TCGA.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.smoking(TCGA.sparse$Pack_years))
+mtext("Smoking", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#4 plot patient's sex
+barplot(rep(1,nrow(TCGA.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = ifelse(TCGA.sparse$gender == "male", "turquoise4", "orchid1"))
+mtext("Gender", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#5 plot driver mut 
+barplot(rep(1,nrow(TCGA.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.driver[TCGA.sparse$driver.type])
+mtext("Driver mutation", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#6 plot SBS legend 
+barplot(1, border = NA, axes = FALSE, col = "white", axisnames = F)
+legend(x = "top", legend = names(color.mutsig), ncol=6, border = NA, bty = "n", cex = 1,
+       fill = color.mutsig)
+
+
+
+### Supp Fig S12 the GIS-LUAD cohort, 
+### and Fig S14, basically the male subgroup
+GIS.clinical <- read.csv("data-GIS_clinical.csv")
+GIS.clinical$driver.group <- factor(GIS.clinical$driver.group, 
+                                    levels = paste("Group",c(1,4,2,3)))
+
+# for Fig S14, run the following two lines
+#GIS.clinical <- subset(GIS.clinical, Gender == "Male" & driver.group != "Group 4")
+#GIS.clinical$driver.group <- factor(GIS.clinical$driver.group, levels = paste("Group",1:3))
+
+GIS.sparse <- read.csv("data-GIS_exposure.csv")
+rownames(GIS.sparse) <- GIS.sparse[,1]
+GIS.sparse <- GIS.sparse[,-1]
+GIS.sparse <- rbind(GIS.sparse, colSums(GIS.sparse))
+rownames(GIS.sparse)[nrow(GIS.sparse)] <- "Total.mut"
+colnames(GIS.sparse) <- sub("\\.","-",colnames(GIS.sparse))
+GIS.clinical$SBS <- as.numeric(GIS.sparse["Total.mut", GIS.clinical$Patient.ID])
+GIS.clinical$SBS4 <- as.numeric(GIS.sparse["SBS4", GIS.clinical$Patient.ID])
+GIS.clinical <- arrange(GIS.clinical, driver.group, desc(SBS))
+GIS.sparse <- t(GIS.sparse)[GIS.clinical$Patient.ID,] %>% data.frame()
+GIS.sparse$Patient.ID <- rownames(GIS.sparse)
+GIS.sparse$APOBEC <- GIS.sparse$SBS2 + GIS.sparse$SBS13
+GIS.sparse <- left_join(GIS.sparse, 
+                        dplyr::select(GIS.clinical, Patient.ID, Smoking.status, Gender,
+                                      driver.gene, driver.group), by = "Patient.ID")
+
+GIS.SBS4 <- subset(GIS.sparse, SBS4>0)
+ggplot(GIS.SBS4, aes(x=log10(Total.mut), y=SBS4)) + theme_bw() + 
+  geom_point(aes(color = driver.group), size=1.5, show.legend = F) + xlim(1,4) + 
+  scale_color_manual(values = c("Group 1"="#66CCEE","Group 2"="#EE6677",
+                                "Group 3"="#228833","Group 4"="grey50")) + 
+  facet_grid(. ~ driver.group) # Fig S12C
+
+SBS4.prop <- count(GIS.clinical, driver.group, SBS4==0)
+SBS4.prop$prop <- SBS4.prop$n/rep(table(GIS.clinical$driver.group), each=2)
+SBS4.prop$label.y <- lapply(unique(SBS4.prop$driver.group), function(x){
+  tmp <- subset(SBS4.prop, driver.group == x)
+  y <- cumsum(tmp$prop) - 0.5*(tmp$prop)
+  return(y)
+}) %>% unlist() # Fig S12B
+
+
+## plot GIS sparse assignment activity
+color.mutsig <- c(scales::brewer_pal(palette = "Paired")(9),"grey10")
+names(color.mutsig) <- c("SBS5","SBS1","SBS40","SBS18","SBS9","APOBEC","SBS17a","SBS17b","SBS28","SBS4")
+sparse.ratio <- GIS.sparse[,names(color.mutsig)]/GIS.sparse$Total.mut
+space.brp <- sapply(table(GIS.sparse$driver.group), function(x){
+  return(c(4,rep(0,x-1)))
+}, simplify = T) %>% unlist()
+
+color.driver <- c("EGFR"="orchid3","KRAS"="lightskyblue","BRAF"="steelblue4",
+                  "KRAS.BRAF"="purple4","MET"="yellowgreen","ERBB2"="tan1",
+                  "ALK"="brown","Wild Type"="gray90")
+
+layout(matrix(c(rep(1,16),rep(2,8),3:5,rep(6,4),rep(7,2)), ncol = 1))
+par(mar = c(0.2, 0.2, 0.1, 0.2), oma = c(1, 8, 1, 1))
+
+#1 plot Total mut in SBS 
+barplot(t(GIS.sparse[,names(color.mutsig)]), border = NA, 
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, at = seq(0,2000,500), line = -1, las = 1, labels = seq(0,2000,500))
+mtext("Signature\nactivity\n(counts)", side=2, line = 2, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#2 plot SBS96 sig reconstruction in ratio
+barplot(t(sparse.ratio[,names(color.mutsig)]), border = NA, ylim = c(0,1.05),
+        axes = FALSE, space = space.brp, axisnames = F, col = color.mutsig)
+axis(side = 2, at = c(0,0.5,1), line = -1, las = 1, labels = c(0,0.5,1))
+mtext("Signature\nactivity\n(ratio)", side=2, line = 2, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#3 plot smoking bar
+barplot(rep(1,nrow(GIS.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = ifelse(GIS.clinical$Smoking.status=="Yes","gray40","gray90"))
+mtext("Smoking", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#4 plot patient sex
+barplot(rep(1,nrow(GIS.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = ifelse(GIS.clinical$Gender =="Male", "turquoise4", "orchid1"))
+mtext("Gender", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#5 plot driver mut 
+barplot(rep(1,nrow(GIS.sparse)), border = NA, axes = FALSE, space = space.brp, 
+        col = color.driver[GIS.sparse$driver.gene])
+mtext("Driver mutation", side=2, line = -1, cex = 1, las = 2, outer = FALSE, col = 'black')
+
+#6 plot SBS legend 
+barplot(1, border = NA, axes = FALSE, col = "white", axisnames = F)
+legend(x = "top", legend = names(color.mutsig), ncol=6, border = NA, bty = "n", cex = 1,
+       fill = color.mutsig)
+
+#7 plot driver group legend
+barplot(1, border = NA, axes = FALSE, col = "white", axisnames = F)
+legend(x = "top", legend = names(color.driver), ncol=length(color.driver), border = NA, 
+       bty = "n", cex = 1, fill = color.driver)
+
+
+### Supp Fig S13 signature activity in male subgroup ###
+rm(list=ls())
+load("ITH2_data.Rdata")
+
+ITH2.clinical <- subset(ITH2.clinical, Gender == "Male")
+ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
+rownames(ITH2.sparse)[11] <- "Total.mut"
+ITH2.sparse <- t(ITH2.sparse) %>% data.frame()
+ITH2.sparse$Sector_WES_ID <- rownames(ITH2.sparse)
+ITH2.sparse <- left_join(
+  ITH2.sparse, dplyr::select(ITH2.table, Patient_ID, Sector_WES_ID, Group), by = "Sector_WES_ID") %>% 
+  left_join(dplyr::select(ITH2.clinical, Patient_ID, Smoking_pk_yr), by = "Patient_ID") %>% 
+  subset(Patient_ID %in% ITH2.clinical$Patient_ID)
+
+## SBS4 assignment and z test 
+SBS4.prop.by.group <- group_by(ITH2.sparse, Group) %>% 
+  summarise(SBS4.assigned = sum(SBS4>0), SBS4.unassigned = sum(SBS4==0)) %>% 
+  data.frame()
+
+SBS4.prop.by.group <- cbind(SBS4.prop.by.group, 
+                            SBS4.prop.by.group[,2:3]/rowSums(SBS4.prop.by.group[,2:3]))
+colnames(SBS4.prop.by.group)[4:5] <- c("SBS4.assigned.prop","SBS4.unassigned.prop")
+
+
+SBS4.prop.test <- lapply(list(1:2,2:3,c(1,3)), function(x){
+  p  <- prop.test(as.matrix(SBS4.prop.by.group[x,2:3]))$p.value %>% as.numeric()
+  df <- data.frame(Group = paste0(SBS4.prop.by.group$Group[x], collapse = " vs. "),
+                   p.value = p)
+  return(df)
+})
+SBS4.prop.test <- do.call("rbind", SBS4.prop.test)
+
+SBS4.prop.test$adj.p.value <- p.adjust(SBS4.prop.test$p.value, method = "BH")
+
+barplot(t(SBS4.prop.by.group[-3,4:5]), names.arg = SBS4.prop.by.group$driver.group, axes = FALSE)
+axis(side = 2, at = seq(0,1,0.25), line = 0, las = 1, labels = paste(seq(0,100,25),"%"))
+
+ITH2.SBS4 <- subset(ITH2.sparse, SBS4>0)
+
+ggplot(ITH2.SBS4, aes(x=log10(Total.mut), y=SBS4)) + 
+  geom_point(aes(color = Group), size = 3, show.legend = F) + 
+  facet_grid(. ~ Group) + theme_bw() + 
+  theme(axis.title.x = element_blank()) + 
+  scale_color_manual(values = c("NSRO-driven non-smoking"="#66CCEE",
+                                "NSRO-driven smoking"="#EE6677",
+                                "Typical-smoking"="#228833"))
+
+
+
+### Supp Fig S15 sig activity in trunk vs branch  ###
 rm(list = ls())
 load("ITH2_data.Rdata")
 ITH2.sparse <- rbind(ITH2.sparse, colSums(ITH2.sparse))
@@ -894,3 +1466,84 @@ Heatmap(as.matrix(gsva.pathway), name = "Z score",
                                  "40-60"="grey35","60-80"="grey15","80up"="grey5")
           )
         ))
+
+
+### Supp Fig S19
+library(GSVA)
+library(GSEABase)
+library(org.Hs.eg.db)
+library(limma)
+library(ComplexHeatmap)
+library(clusterProfiler)
+
+GIS.TPM <- readRDS("data-GIS.RNA.TPM.rds")
+tmp <- clusterProfiler::bitr(rownames(GIS.TPM), fromType = "SYMBOL", toType = "ENTREZID", 
+                             OrgDb=org.Hs.eg.db, drop = F)
+tmp <- tmp[duplicated(tmp$SYMBOL)==F,]
+mat <- as.matrix(GIS.TPM[tmp$SYMBOL,])
+rownames(mat) <- tmp$ENTREZID
+
+
+c2BroadSets <- GSEABase::getGmt(
+  con = "./External data/c2.cp.reactome.v2022.1.Hs.symbols.gmt", 
+  geneIdType = SymbolIdentifier(), 
+  collectionType = BroadCollection(category="h"), 
+  sep = "\t"
+)
+
+GIS.RNA.gsva <- gsva(expr = mat, c2BroadSets, min.sz=10, max.sz=500)
+GIS.clinical <- read.csv("data-GIS_clinical.csv") %>% 
+  subset(Patient.ID %in% colnames(GIS.RNA.gsva))
+
+GIS.reactome <- GIS.RNA.gsva[grep("REACTOME",rownames(GIS.RNA.gsva)),]
+
+# For Supp Fig S21, run the following code
+# GIS.clinical <- subset(GIS.clinical, Gender == "Male")
+
+mod <- model.matrix(~ GIS.clinical$Smoking.status, levels = c("Yes","No"))
+colnames(mod)[2] <- c("non.smoker")
+fit <- lmFit(object = GIS.reactome[,GIS.clinical$Patient.ID], design = mod)
+fit <- eBayes(fit)
+tt <- topTable(fit, coef=2, n=Inf, adjust.method = "fdr")
+tt$pathway <- str_replace_all(string = rownames(tt), pattern = "_", replacement = " ") %>% str_to_title()
+tt$up.down <- ifelse(tt$logFC>0, "Up-regulated", "Down-regulated")
+tt <- rbind(arrange(subset(tt, P.Value <= 0.05 & logFC > 0), P.Value)[1:10,], 
+            arrange(subset(tt, P.Value <= 0.05 & logFC < 0), P.Value)[1:10,])
+
+pathway <- rownames(tt)
+gsva.pathway <- GIS.reactome[pathway, GIS.clinical$Patient.ID] %>% t() %>% scale() %>% t()
+rownames(gsva.pathway) <- sub("REACTOME_","",rownames(gsva.pathway)) %>% 
+  str_replace_all(pattern = "_", replacement = " ") %>% str_to_title()
+pathway.q.value <- format(tt[pathway, "adj.P.Val"], digits = 2)
+rownames(gsva.pathway) <- paste(str_pad(pathway.q.value, width = 9, side = "right"), 
+                                rownames(gsva.pathway), sep = " ")
+hm <- Heatmap(as.matrix(gsva.pathway), cluster_columns = T, column_km = 2)
+
+GIS.clinical$pathway.group <- "Group I" ## cell cycle high
+GIS.clinical$pathway.group[column_order(hm)[[2]]] <- "Group II" ## cell cycle low
+GIS.clinical$driver.group <- factor(GIS.clinical$driver.group, levels = paste("Group",c(1,4,2,3)))
+GIS.clinical <- arrange(GIS.clinical, driver.group, pathway.group)
+
+Heatmap(as.matrix(gsva.pathway[,GIS.clinical$Patient.ID]), name = "Z score", 
+        #column_split = rep(paste("Group",1:2), table(GIS.clinical$driver.group)),
+        column_split = rep(paste("Group",c(1,4,2,3)), table(GIS.clinical$driver.group)),
+        cluster_columns = F, column_names_gp = gpar(fontsize = 4), 
+        row_split = rep(c("Up-regulated","Down-regulated"), c(10,10)),
+        cluster_rows = T, row_names_gp = gpar(fontsize = 8), 
+        top_annotation = HeatmapAnnotation(
+          Driver.group = GIS.clinical$driver.group, 
+          Driver.mut = GIS.clinical$driver.gene, 
+          Pathway.group = GIS.clinical$pathway.group, 
+          Gender = GIS.clinical$Gender,
+          Smoking = GIS.clinical$Smoking.status,
+          col = list(Driver.group = c("Group 1"="#66CCEE", "Group 2"="#EE6677",
+                                      "Group 3"="#228833", "Group 4" = "gray50"),
+                     Driver.mut = c("EGFR"="orchid3","KRAS"="lightskyblue","MET"="yellowgreen",
+                                    "ALK"="brown4","ERBB2"="tan1",
+                                    "BRAF"="steelblue4","Wild Type"="gray90"),
+                     Pathway.group = c("Group I"="black", "Group II"="gray50"),
+                     Gender = c("Male"="turquoise4", "Female"="orchid1"),
+                     Smoking = c("No"="grey90", "Yes"="grey10")
+          )
+        ))
+
